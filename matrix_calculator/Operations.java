@@ -1,6 +1,11 @@
 package matrix_calculator;
 
-/** Executes Matrix artihmetic operations. */
+/** Executes matrix operations.
+ * 
+ * @author AndyPalan
+ *
+ */
+
 public static class Artihmetic {
 
     /** Returns the Matrix that is the result of adding together A and B (A + B). */
@@ -51,10 +56,22 @@ public static class Artihmetic {
             }
             contents[i][j] = entry;
             if (j == (B.getWidth - 1)) {
-                j = 0;
+                j = -1;
             }
         }
         return new Matrix(A.getHeight(), B.getWidth(), contents);
+    }
+
+    /** Copies the contents of Matrix A into a new Matrix and returns
+     * that Matrix. */
+    public static Matrix matrixCopy(Matrix A) {
+        Matrix B = new Matrix(A.getHeight(), A.getWidth(), new Double[][]);
+        for (int r = 1; r <= A.getHeight(); r++) {
+            for (int c = 1; c <= A.getWidth(); c++) {
+                B.set(r, c, A.get(r, c));
+            }
+        }
+        return B;
     }
 
 }
