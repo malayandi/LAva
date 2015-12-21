@@ -15,9 +15,12 @@ public class VectorSet {
 
     /** Performs the Gram-Schmidt process on this vector set. */
     public VectorSet gramSchmidt(int count, VectorSet initial) {
-        Vector u = _vectors.get(count);
+        double[] entries = _vectors.get(count).values();
+        double[] entries2 = new double[entries.length];
+        System.arraycopy(entries, 0, entries2, 0, entries.length);
+        Vector u = new Vector(entries2);
         for (int counter = 0; counter < count; counter++) {
-            Vector next = _vectors.get(counter);
+            Vector next = initial.get(counter);
             double coefficient = 0;
             for (int index = 0; index < u.values().length; index++) {
                 coefficient += u.values()[index] * next.values()[index];
