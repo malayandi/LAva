@@ -185,7 +185,7 @@ public class Matrix {
     }
 
     /** Returns true if this matrix is injective i.e. if columns of this Matrix
-     * span R^n, where n is the dimension of the domain.
+     * span R^n, where n is the dimension of the domain of the Matrix.
      *
      * @throws MatrixException */
     public Boolean isInjective() throws MatrixException {
