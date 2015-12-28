@@ -34,8 +34,9 @@ public class Operations {
         return add(A, C);
     }
 
-    /** Returns the Matrix that has been scalar multiplied by K. */
-    public static Matrix scalarMult(Matrix A, double k) {
+    /** Returns the Matrix that has been scalar multiplied by K. 
+     * @throws MatrixException */
+    public static Matrix scalarMult(Matrix A, double k) throws MatrixException {
         double[][] contents = new double[A.getHeight()][A.getWidth()];
         for (int r = 1; r <= A.getHeight(); r++) {
             for (int c = 1; c <= A.getWidth(); c++) {
@@ -54,25 +55,25 @@ public class Operations {
             throw new MatrixException("These two matrices do not have"
                             + " the appropriate dimension to be multiplied together.");
         }
-        double[][] contents = new double[A.getHeight()][A.getWidth()];
-        for (int i = 0, j = 0; i < A.getHeight(); i++, j++) {
+        double[][] contents = new double[A.getHeight()][B.getWidth()];
+        for (int i = 0, j = 0; i < A.getHeight(); j++) {
             int entry = 0;
-            for (int r = 1; r <= B.getHeight(); r++) {
-                for (int c = 1; c <= A.getWidth(); c++) {
-                    entry += (A.get(r, c) * B.get(c, r));
-                }
+            for (int c = 1; c <= A.getWidth(); c++) {
+                entry += (A.get(i + 1, c) * B.get(c, j + 1));
             }
             contents[i][j] = entry;
             if (j == (B.getWidth() - 1)) {
                 j = -1;
+                i++;
             }
         }
         return new Matrix(A.getHeight(), B.getWidth(), contents);
     }
 
     /** Copies the contents of Matrix A into a new Matrix and returns that
-     * Matrix. */
-    public static Matrix matrixCopy(Matrix A) {
+     * Matrix. 
+     * @throws MatrixException */
+    public static Matrix matrixCopy(Matrix A) throws MatrixException {
         Matrix B = new Matrix(A.getHeight(), A.getWidth(),
                         new double[A.getHeight()][A.getWidth()]);
         for (int r = 1; r <= A.getHeight(); r++) {

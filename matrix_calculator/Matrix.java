@@ -8,18 +8,15 @@ import java.util.ArrayList;
 
 public class Matrix {
 
-    public Matrix(int row, int col, double[][] contents) {
-        try {
-            if (!(contents.length == row && contents[1].length == col)) {
-                throw new MatrixException("Incorrect dimension.");
-            }
-            _dim = new ArrayList<Integer>();
-            _dim.add(row);
-            _dim.add(col);
-            _contents = contents;
-        } catch (MatrixException excp) {
-            System.out.println(excp.getMessage());
+    /** Creates a new ROW x COL square Matrix with contents CONTENTS. */
+    public Matrix(int row, int col, double[][] contents) throws MatrixException {
+        if (!(contents.length == row && contents[1].length == col)) {
+            throw new MatrixException("Incorrect dimension.");
         }
+        _dim = new ArrayList<Integer>();
+        _dim.add(row);
+        _dim.add(col);
+        _contents = contents;
     }
 
     /** Returns the double at row R and col C. */
@@ -78,25 +75,20 @@ public class Matrix {
      *
      * @throws MatrixException */
     public void rowReduction(Boolean EF) throws MatrixException { // Consider
-        // used
-        // _rowRed to
-        // calculate
-        // _rowRedEF if takes too long to
-        // calculate _rowRedEF on its own
         Matrix B = Operations.matrixCopy(this);
         int pivot = 1;
         for (int c = 1; c <= B.getWidth(); c++) {
             if (B.count(c, pivot) == 0) {
-                continue; // Non-pivot column
-            } else if (B.get(c, pivot) == 0) {
-                int k = c + 1;
+                continue;
+            } else if (B.get(pivot, c) == 0) {
+                int k = pivot + 1;
                 while (B.get(k, c) == 0) {
                     k++;
                 }
-                B.switchRow(c, k);
+                B.switchRow(pivot, k);
             }
             if (EF == true) {
-                for (int r = 0; r <= B.getHeight(); r++) {
+                for (int r = 1; r <= B.getHeight(); r++) {
                     if (r == pivot) {
                         continue;
                     }
@@ -107,6 +99,7 @@ public class Matrix {
                     B.add(pivot, r, -1 * B.get(r, c) / B.get(pivot, c));
                 }
             }
+            B.scalarMultRow(pivot, 1 / B.get(pivot, c));
             pivot++;
         }
         if (EF == true) {
@@ -115,7 +108,7 @@ public class Matrix {
             _rowRed = B;
         }
         if (_rank == null) {
-            _rank = pivot;
+            _rank = pivot - 1;
             _nullity = getWidth() - _rank;
             _linInd = (_rank == getWidth());
             _surjective = (_rank == getHeight());
@@ -259,7 +252,7 @@ public class Matrix {
         if (c < 1 || c > getWidth()) {
             throw new MatrixException("Column " + c + "is not a valid row.");
         } else if (r < 1 || r > getHeight()) {
-            throw new MatrixException("Column " + c + "is not a valid row.");
+            throw new MatrixException("Row " + r + "is not a valid row.");
         }
         int num = 0;
         for (int i = r; i <= getHeight(); i++) {
