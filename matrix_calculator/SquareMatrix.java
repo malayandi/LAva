@@ -27,8 +27,12 @@ public class SquareMatrix extends Matrix {
     /** The eigvenvectors of this Matrix. */
     private ArrayList<Vector> _eigenvectors;
     
+    /** True if the Matrix is diagonalisable. */
+    private Boolean _diagonalisable;
     
+    /** The diagonalised form of this Matrix. */
+    private Matrix _diagonalised;
     
-    
+    /** The QR-Factorised form of this Matrix. */
 
 }

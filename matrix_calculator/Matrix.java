@@ -301,7 +301,7 @@ public class Matrix {
     private Boolean _linInd;
 
     /** A Boolean that is true if this Matrix is surjective, i.e. if columns of
-     * this Matrix span R^n, where n is the dimension of the domain. */
+     * this Matrix span R^m, where m is the dimension of the range. */
     private Boolean _surjective;
 
     /** A Boolean that is true if this Matrix is injective. */
