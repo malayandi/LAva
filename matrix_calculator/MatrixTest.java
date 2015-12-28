@@ -55,6 +55,27 @@ public class MatrixTest {
         A.add(1, 2, 2);
         A.print();
     }
+    
+    @Test
+    public void transpose() throws MatrixException {
+        double[][] contentsA = {
+                        { 5, 4, 6 },
+                        { 1, 0, 3 },
+                        { 0, 0, 7 },
+                        { 3, 0, 0 }
+
+        };
+        Matrix A = new Matrix(4, 3, contentsA);
+        double[][] contentsB = {
+                        { 5, 1, 0, 3 },
+                        { 4, 0, 0, 0 },
+                        { 6, 3, 7, 0 },
+
+        };
+        Matrix B = new Matrix(3, 4, contentsB);
+        assertTrue(A.getTranspose().equals(B));
+    }
+
 
     @Test
     public void count() throws MatrixException {

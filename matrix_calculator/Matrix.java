@@ -6,6 +6,8 @@ import java.util.ArrayList;
  *
  * @author AndyPalan */
 
+// STILL TO DO: BASIS FOR NULL SPACE AND RANGE
+
 public class Matrix {
 
     /** Creates a new ROW x COL square Matrix with contents CONTENTS. */
@@ -68,13 +70,24 @@ public class Matrix {
             System.out.println("");
         }
     }
+    
+    /** Sets _transpose to be the transpose of this Matrix. */
+    private void transpose() throws MatrixException {
+        Matrix T = new Matrix(getWidth(), getHeight(), new double[getWidth()][getHeight()]);
+        for (int r = 1; r <= getHeight(); r++) {
+            for (int c = 1; c <= getWidth(); c++) {
+                T.set(c, r, get(r, c));
+            }
+        }
+        _transpose = T;
+    }
 
     /** Sets _rowRed to be this Matrix in row reduced form if EF is false and
      * sets _rowRedEF to be this Matrix in row reduced echelon form if EF is
      * true.
      *
      * @throws MatrixException */
-    public void rowReduction(Boolean EF) throws MatrixException { // Consider
+    public void rowReduction(Boolean EF) throws MatrixException {
         Matrix B = Operations.matrixCopy(this);
         int pivot = 1;
         for (int c = 1; c <= B.getWidth(); c++) {
@@ -134,6 +147,14 @@ public class Matrix {
             rowReduction(true);
         }
         return _rowRedEF;
+    }
+    
+    /** Returns the transpose of this Matrix. */
+    public Matrix getTranspose() throws MatrixException {
+        if (_transpose == null) {
+            transpose();
+        }
+        return _transpose;
     }
 
     /** Returns the rank of this Matrix.
@@ -268,6 +289,12 @@ public class Matrix {
 
     /** The dimension of this Matrix. */
     private ArrayList<Integer> _dim;
+    
+    /** The rank of this Matrix. */
+    private Integer _rank;
+
+    /** The dimension of the null space of this Matrix. */
+    private Integer _nullity;
 
     /** A Boolean that is true if the columns of this Matrix are linearly
      * independent. */
@@ -285,10 +312,7 @@ public class Matrix {
 
     /** The row reduced echelon form of this Matrix. */
     private Matrix _rowRedEF;
-
-    /** The rank of this Matrix. */
-    private Integer _rank;
-
-    /** The dimension of the null space of this Matrix. */
-    private Integer _nullity;
+    
+    /** The transpose of this Matrix. */
+    private Matrix _transpose;
 }
