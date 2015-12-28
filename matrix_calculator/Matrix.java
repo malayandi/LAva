@@ -72,7 +72,7 @@ public class Matrix {
     }
     
     /** Sets _transpose to be the transpose of this Matrix. */
-    private void transpose() throws MatrixException {
+    public void transpose() throws MatrixException {
         Matrix T = new Matrix(getWidth(), getHeight(), new double[getWidth()][getHeight()]);
         for (int r = 1; r <= getHeight(); r++) {
             for (int c = 1; c <= getWidth(); c++) {
@@ -84,7 +84,8 @@ public class Matrix {
 
     /** Sets _rowRed to be this Matrix in row reduced form if EF is false and
      * sets _rowRedEF to be this Matrix in row reduced echelon form if EF is
-     * true.
+     * true. Simultaneously computes rank/nullity while checking for linear
+     * independence of columns and injectivity/surjectivity of this Matrix.
      *
      * @throws MatrixException */
     public void rowReduction(Boolean EF) throws MatrixException {
@@ -291,28 +292,28 @@ public class Matrix {
     private ArrayList<Integer> _dim;
     
     /** The rank of this Matrix. */
-    private Integer _rank;
+    protected Integer _rank;
 
     /** The dimension of the null space of this Matrix. */
-    private Integer _nullity;
+    protected Integer _nullity;
 
     /** A Boolean that is true if the columns of this Matrix are linearly
      * independent. */
-    private Boolean _linInd;
+    protected Boolean _linInd;
 
     /** A Boolean that is true if this Matrix is surjective, i.e. if columns of
      * this Matrix span R^m, where m is the dimension of the range. */
-    private Boolean _surjective;
+    protected Boolean _surjective;
 
     /** A Boolean that is true if this Matrix is injective. */
-    private Boolean _injective;
+    protected Boolean _injective;
 
     /** The row reduced form of this Matrix. */
-    private Matrix _rowRed;
+    protected Matrix _rowRed;
 
     /** The row reduced echelon form of this Matrix. */
-    private Matrix _rowRedEF;
+    protected Matrix _rowRedEF;
     
     /** The transpose of this Matrix. */
-    private Matrix _transpose;
+    protected Matrix _transpose;
 }

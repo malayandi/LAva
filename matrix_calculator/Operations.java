@@ -83,5 +83,20 @@ public class Operations {
         }
         return B;
     }
+    
+    /** Copies the contents of Matrix A into a new Matrix and returns that
+     * Matrix. 
+     * @throws MatrixException */
+    public static SquareMatrix matrixCopy(SquareMatrix A) throws MatrixException {
+        SquareMatrix B = new SquareMatrix(A.getHeight(),
+                        new double[A.getHeight()][A.getWidth()]);
+        for (int r = 1; r <= A.getHeight(); r++) {
+            for (int c = 1; c <= A.getWidth(); c++) {
+                B.set(r, c, A.get(r, c));
+            }
+        }
+        return B;
+    }
+
 
 }

@@ -5,7 +5,6 @@ import org.junit.Test;
 
 public class MatrixTest {
 
-    @Test
     public void basicFunctionality() throws MatrixException {
         double[][] contents = {
                         { 5, 4, 6 },
@@ -31,7 +30,6 @@ public class MatrixTest {
         A.print();        
     }
 
-    @Test
     public void elementaryRowOperations() throws MatrixException {
         double[][] contents = {
                         { 5, 4, 6 },
@@ -55,8 +53,7 @@ public class MatrixTest {
         A.add(1, 2, 2);
         A.print();
     }
-    
-    @Test
+
     public void transpose() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -77,7 +74,6 @@ public class MatrixTest {
     }
 
 
-    @Test
     public void count() throws MatrixException {
         double[][] contents = {
                         { 5, 4, 6 },
@@ -97,7 +93,6 @@ public class MatrixTest {
         assertEquals(A.count(2, 3), 0);
     }
 
-    @Test
     public void basicOperations() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -115,21 +110,20 @@ public class MatrixTest {
 
         };
         Matrix B = new Matrix(4, 3, contentsB);
-        
+
         System.out.println("");
         Matrix C = Operations.add(A, B);
         C.print();
-        
+
         System.out.println("");
         Matrix D = Operations.scalarMult(A, 2.5);
         D.print();
-        
+
         System.out.println("");
         Matrix E = Operations.subtract(A, B);
         E.print();
     }
-    
-    @Test
+
     public void multiplication() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -157,8 +151,7 @@ public class MatrixTest {
         Matrix ABTest = Operations.matrixMult(A, B);
         assertTrue(AB.equals(ABTest));
     }
-    
-    @Test
+
     public void rowReduction() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -168,7 +161,7 @@ public class MatrixTest {
 
         };
         Matrix A = new Matrix(4, 3, contentsA);
-        
+
         double[][] contentsRRA = {
                         { 1, 0.8, 1.2 },
                         { 0, 1, -2.25 },
@@ -177,46 +170,73 @@ public class MatrixTest {
 
         };
         Matrix RRA = new Matrix(4, 3, contentsRRA);
-        
+
         System.out.println("");
         A.getRowRed().print();
-        
+
         System.out.println("");
         A.getRowRedEF().print();
-        
+
         assertTrue(A.isLinInd());
         assertTrue(A.isInjective());
         assertFalse(A.isSurjective());
         assertEquals(A.getRank(), 3);
         assertEquals(A.getNullity(), 0);
 
-        
+
         double[][] contentsB = {
                         { 0, 4, 6, 7 },
                         { 0, 2, 3, 12 },
                         { 0, 9, 7, 0 },
         };
         Matrix B = new Matrix(3, 4, contentsB);
-        
+
         double[][] contentsRRB = {
                         { 0, 1, 1.5, 1.75 },
                         { 0, 0, 1, 63/26 },
                         { 0, 0, 0, 1 },
         };
         Matrix RRB = new Matrix(3, 4, contentsRRB);
-        
+
         System.out.println("");
         B.getRowRed().print();
-        
+
         System.out.println("");
         B.getRowRedEF().print();
-        
+
         assertFalse(B.isLinInd());
         assertFalse(B.isInjective());
         assertTrue(B.isSurjective());
         assertEquals(B.getRank(), 3);
         assertEquals(B.getNullity(), 1);
     }
+
+    @Test
+    public void basicSquareMatrix() throws MatrixException {
+        double[][] contentsA = {
+                        { 1, 5 },
+                        { 2, 7 }
+        };
+        SquareMatrix A = new SquareMatrix(2, contentsA);
+        double[][] contentsAT = {
+                        { 1, 2 },
+                        { 5, 7 }
+        };
+        SquareMatrix AT = new SquareMatrix(2, contentsAT);
+        double[][] contentsAInverse = {
+                        { -7/3, 5/3 },
+                        { 2/3, -1/3 }
+        };
+        SquareMatrix AInverse = new SquareMatrix(2, contentsAInverse);
+        
+        assertTrue(A.getTranspose().equals(AT));
+        A.getInverse().print();
+//        assertTrue(A.getInverse().equals(AInverse));
+        assertEquals(A.getTrace(), 8 , 0);
+        assertEquals(A.getDet(), -3, 0);
+        assertEquals(A.getDet(), 1/A.getInverse().getDet(), 0);        
+    }
 }
+
 
 
