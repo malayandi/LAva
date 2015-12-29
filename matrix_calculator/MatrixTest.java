@@ -150,6 +150,19 @@ public class MatrixTest {
         Matrix AB = new Matrix(4, 4, contentsAB);
         Matrix ABTest = Operations.matrixMult(A, B);
         assertTrue(AB.equals(ABTest));
+        
+        double[][] contentsA2 = {
+                        { 2, 5 },
+                        { 3, 7 }
+        };
+        SquareMatrix A2 = new SquareMatrix(2, contentsA2);
+        double[][] contentsA2Inverse = {
+                        { -7, 5 },
+                        { 3, -2 }
+        };
+        SquareMatrix A2Inverse = new SquareMatrix(2, contentsA2Inverse);
+        Matrix ITest = Operations.matrixMult(A2, A2Inverse);
+        ITest.print();
     }
 
     public void rowReduction() throws MatrixException {
@@ -224,17 +237,16 @@ public class MatrixTest {
         };
         SquareMatrix AT = new SquareMatrix(2, contentsAT);
         double[][] contentsAInverse = {
-                        { -7/3, 5/3 },
-                        { 2/3, -1/3 }
+                        { (double) -7/3, (double) 5/3 },
+                        { (double) 2/3, (double) -1/3 }
         };
         SquareMatrix AInverse = new SquareMatrix(2, contentsAInverse);
         
         assertTrue(A.getTranspose().equals(AT));
-        A.getInverse().print();
-//        assertTrue(A.getInverse().equals(AInverse));
         assertEquals(A.getTrace(), 8 , 0);
         assertEquals(A.getDet(), -3, 0);
-        assertEquals(A.getDet(), 1/A.getInverse().getDet(), 0);        
+        assertEquals(A.getDet(), 1/A.getInverse().getDet(), 0); 
+        assertTrue(A.getInverse().equals(AInverse));
     }
 }
 
