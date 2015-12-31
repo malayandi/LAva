@@ -81,6 +81,8 @@ public class EigenvalueTests {
         SquareMatrix R = new SquareMatrix(3, contentsR);
 
         A.getQ().print();
+        System.out.println("hello");
+        A.getR().print();
     }
 
 }

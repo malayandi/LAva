@@ -148,7 +148,8 @@ public class SquareMatrix extends Matrix {
      * @throws MatrixException */
     public void QR() throws MatrixException {
         VectorSet columns = vectorSet();
-        VectorSet orthonormalised = columns.gramSchmidt(0, columns);
+        VectorSet orthogonalised = columns.gramSchmidt(0, columns);
+        VectorSet orthonormalised = orthogonalised.orthonormalise();
         SquareMatrix Q = orthonormalised.toSquareMatrix();
         SquareMatrix R = new SquareMatrix(Q.getHeight(), new double[getHeight()][getHeight()]);
         for (int c = 1; c <= getHeight(); c++) {
@@ -236,7 +237,9 @@ public class SquareMatrix extends Matrix {
                 _eigenvalues.add(get(i, i));
             }
         } else {
-
+            SquareMatrix A = Operations.matrixCopy(this);
+            SquareMatrix Q = A.getQ();
+            SquareMatrix R = A.getR();
         }
     }
 

@@ -29,6 +29,9 @@ public class Vector {
     public double[] normalize() {
         if (!_normalized) {
             int count = 0;
+            if (_magnitude == null) {
+                magnitude();
+            }
             for (double value : _values) {
                 _normalization[count] = ((double) value / _magnitude);
                 count++;
@@ -64,11 +67,12 @@ public class Vector {
 
     /** Returns the magnitude of this vector. */
     public double magnitude() {
-       _magnitude = 0;
+       _magnitude = (double) 0;
        for (double value : _values) {
            _magnitude += value * value;
             }
-        return _magnitude;
+       _magnitude = Math.sqrt(_magnitude);
+       return _magnitude;
     }
 
     /** Returns the entries of this vector. */
@@ -88,7 +92,7 @@ public class Vector {
     /** The number of entries in this vector. */
     private int _numRows;
     /** The magnitude of this vector. */
-    private double _magnitude;
+    private Double _magnitude;
     /** The normalized entries of this vector. */
     private double[] _normalization;
 }

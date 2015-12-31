@@ -47,7 +47,7 @@ public class VectorSet {
             for (int index = 0; index < u.values().length; index++) {
                 coefficient += u.values()[index] * next.values()[index];
             }
-            coefficient = coefficient / next.magnitude();
+            coefficient = coefficient / (next.magnitude() * next.magnitude());
             for (int index = 0; index < next.numRows(); index++) {
                 u.values()[index] -= coefficient * next.values()[index];
             }
@@ -61,6 +61,15 @@ public class VectorSet {
         } else {
             return initial;
         }
+    }
+    
+    /** Returns a VectorSet containing orthonormalised vectors from this set. */
+    public VectorSet orthonormalise() {
+        Vector[] result = new Vector[size()];
+        for (int i = 0; i < size(); i++) {
+            result[i] = new Vector(_vectors.get(i).normalize());
+        }
+        return new VectorSet(result);
     }
     
     /** Returns a Matrix containing the vectors of this set as its columns. 

@@ -8,7 +8,7 @@ public class VectorSetTest {
     @Test
     public void test() {
         Vector vector = new Vector(1, 2, 3, 4);
-        assertEquals(30, vector.magnitude(), 0.1); // magnitude works
+        assertEquals(Math.sqrt(30), vector.magnitude(), 0.1); // magnitude works
         assertEquals(4, vector.numRows()); // numrows works
         double[] normalized = vector.normalize();
         assertEquals(0.033, normalized[0], .001);
