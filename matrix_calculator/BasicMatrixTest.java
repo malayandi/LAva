@@ -3,7 +3,7 @@ package matrix_calculator;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class MatrixTest {
+public class BasicMatrixTest {
 
     @Test
     public void basicFunctionality() throws MatrixException {
@@ -228,6 +228,20 @@ public class MatrixTest {
         assertTrue(B.isSurjective());
         assertEquals(B.getRank(), 3);
         assertEquals(B.getNullity(), 1);
+        
+        double[][] contentsC = {
+                        { 2, 4},
+                        { 1, 2}
+        };
+        Matrix C = new Matrix(2, 2, contentsC);
+        
+        System.out.println("");
+        C.getRowRed().print();
+
+        System.out.println("");
+        C.getRowRedEF().print();
+
+
     }
 
     @Test
@@ -250,11 +264,9 @@ public class MatrixTest {
         
         assertTrue(A.getTranspose().equals(AT));
         assertEquals(A.getTrace(), 8 , 0);
+        A.getRowRed().print();
         assertEquals(A.getDet(), -3, 0);
         assertEquals(A.getDet(), 1/A.getInverse().getDet(), 0); 
         assertTrue(A.getInverse().equals(AInverse));
     }
 }
-
-
-

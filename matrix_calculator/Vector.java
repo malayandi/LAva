@@ -1,5 +1,7 @@
 package matrix_calculator;
 
+import java.util.ArrayList;
+
 /** A class representing the general Vector object.
  * 
  * @author Andrew Pau */
@@ -15,7 +17,7 @@ public class Vector {
         _magnitude = counter;
         _normalized = false;
     }
-
+    
     /** Returns an array representing the normalized vector. */
     public double[] normalize() {
         if (!_normalized) {
@@ -27,6 +29,14 @@ public class Vector {
             _normalized = true;
         }
         return _normalization;
+    }
+    
+    public double dotProduct(Vector v) {
+        double result = 0;
+        for (int i = 0; i < numRows(); i++) {
+            result += (get(i) * v.get(i));
+        }
+        return result;
     }
 
     /** Returns the number of entries in this vector. */
@@ -42,6 +52,11 @@ public class Vector {
     /** Returns the entries of this vector. */
     public double[] values() {
         return _values;
+    }
+    
+    /** Returns the entry at index K. */
+    public double get(int k) {
+        return _values[k];
     }
 
     /** Boolean indicating whether the vector has been normalized. */

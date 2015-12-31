@@ -40,6 +40,37 @@ public class VectorSet {
             return initial;
         }
     }
+    
+    /** Returns a Matrix containing the vectors of this set as its columns. 
+     * @throws MatrixException */
+    public Matrix toMatrix() throws MatrixException {
+        int h = _vectors.get(0).numRows();
+        int w = _vectors.size();
+        Matrix matrix = new Matrix(h, w, new double[h][w]);
+        for (int c = 0; c < w; c++) {
+            Vector v = get(c);
+            for (int r = 0; r < h; r++) {
+                matrix.set(r + 1, c + 1, v.get(r));
+            }
+        }
+        return matrix;
+    }
+    
+    /** Returns a Square Matrix containing the vectors of this set as its columns. 
+     * @throws MatrixException */
+    public SquareMatrix toSquareMatrix() throws MatrixException {
+        int h = _vectors.get(0).numRows();
+        int w = _vectors.size();
+        SquareMatrix matrix = new SquareMatrix(h, new double[h][w]);
+        for (int c = 0; c < w; c++) {
+            Vector v = get(c);
+            for (int r = 0; r < h; r++) {
+                matrix.set(r + 1, c + 1, v.get(r));
+            }
+        }
+        return matrix;
+    }
+
 
     /** Returns an ArrayList containing the vectors within this set. */
     public int size() {

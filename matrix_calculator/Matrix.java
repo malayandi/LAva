@@ -263,15 +263,15 @@ public class Matrix {
         }
     }
 
-    /** Returns the number of non-zero entries in column C of this Matrix.
-     *
+    /** Returns the number of non-zero entries in column C of this Matrix
+     * (values smaller than epsilon are treated as 0).
      * @throws MatrixException */
     public int count(int c) throws MatrixException {
         return count(c, 1);
     }
 
     /** Returns the number of non-zero entries in column C of this Matrix,
-     * starting at row R.
+     * starting at row R (values smaller than epsilon are treated as 0).
      *
      * @throws MatrixException */
     public int count(int c, int r) throws MatrixException {
@@ -282,11 +282,24 @@ public class Matrix {
         }
         int num = 0;
         for (int i = r; i <= getHeight(); i++) {
-            if (get(i, c) != 0) {
+            if (Math.abs(get(i, c)) >= epsilon) {
                 num++;
             }
         }
         return num;
+    }
+    
+    /** Returns a vector set containing the columns of this matrix as vectors. */
+    public VectorSet vectorSet() {
+        Vector[] vectors = new Vector[getWidth()];
+        for (int c = 0; c < getWidth(); c++) {
+            double[] values = new double[getHeight()];
+            for (int r = 0; r < getHeight(); r++) {
+                values[r] = get(r + 1, c + 1);
+            }
+            vectors[c] = new Vector(values);
+        }
+        return new VectorSet(vectors);
     }
 
     /** The contents of this Matrix. */
@@ -322,7 +335,7 @@ public class Matrix {
     protected Matrix _transpose;
     
     /** Two doubles are considered equal if they are within this margin. */
-    private static final double epsilon = 0.0001;
+    protected static final double epsilon = 0.0001;
     
     /** The format of output for entries in the matrix. */
     private static final DecimalFormat df = new DecimalFormat("#.####");

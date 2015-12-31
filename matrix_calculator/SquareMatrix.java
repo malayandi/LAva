@@ -6,12 +6,12 @@ import java.util.ArrayList;
  * 
  * @author AndyPalan */
 public class SquareMatrix extends Matrix {
-    
+
     /** Creates a new N x N square Matrix with contents CONTENTS. */
     public SquareMatrix(int n, double[][] contents) throws MatrixException {
         super(n, n, contents);
     }
-            
+
     /** Sets _rowRed to be this Matrix in row reduced form if EF is false and
      * sets _rowRedEF to be this Matrix in row reduced echelon form if EF is
      * true. Simultaneously computes rank/nullity/determinant and inverse
@@ -74,7 +74,7 @@ public class SquareMatrix extends Matrix {
             _injective = (_nullity == 0);
         }
     }
-    
+
     /** Returns the row reduced form of this Matrix.
      *
      * @throws MatrixException */
@@ -102,7 +102,7 @@ public class SquareMatrix extends Matrix {
         }
         return _det;
     }
-    
+
     /** Returns the trace of this Matrix. */
     public double getTrace() {
         if (_trace == null) {
@@ -124,7 +124,7 @@ public class SquareMatrix extends Matrix {
         }
         return _inverse;
     }
-    
+
     /** Returns the transpose of this Matrix. */
     public SquareMatrix getTranspose() throws MatrixException {
         if (_transpose == null) {
@@ -132,7 +132,7 @@ public class SquareMatrix extends Matrix {
         }
         return _transpose;
     }
-    
+
     /** Sets _transpose to be the transpose of this Matrix. */
     public void transpose() throws MatrixException {
         SquareMatrix T = new SquareMatrix(getHeight(), new double[getHeight()][getHeight()]);
@@ -143,21 +143,68 @@ public class SquareMatrix extends Matrix {
         }
         _transpose = T;
     }
-    
-    /** Returns true if this Matrix is diagonal. */
+
+    /** Sets _Q and _R to be the QR factorised form of this Matrix. 
+     * @throws MatrixException */
+    public void QR() throws MatrixException {
+        VectorSet columns = vectorSet();
+        VectorSet orthonormalised = columns.gramSchmidt(0, columns);
+        SquareMatrix Q = orthonormalised.toSquareMatrix();
+        SquareMatrix R = new SquareMatrix(Q.getHeight(), new double[getHeight()][getHeight()]);
+        for (int c = 1; c <= getHeight(); c++) {
+            for (int r = 1; r <= c; r++) {
+                R.set(r, c, columns.get(c - 1).dotProduct(orthonormalised.get(r - 1)));
+            }
+        }
+        _Q = Q;
+        _R = R;
+    }
+
+    /** Returns an array list containing the QR factorised form of this Matrix. 
+     * @throws MatrixException */
+    public ArrayList<SquareMatrix> getQR() throws MatrixException {
+        if (_Q == null) {
+            QR();
+        }
+        ArrayList<SquareMatrix> result = new ArrayList<SquareMatrix>();
+        result.add(_Q);
+        result.add(_R);
+        return result;
+    }
+
+    /** Returns Q from the QR factorised form of this Matrix. 
+     * @throws MatrixException */
+    public SquareMatrix getQ() throws MatrixException {
+        if (_Q == null) {
+            QR();
+        }
+        return _Q;
+    }
+
+    /** Returns R from the QR factorised form of this Matrix. 
+     * @throws MatrixException */
+    public SquareMatrix getR() throws MatrixException {
+        if (_R == null) {
+            QR();
+        }
+        return _R;
+    }
+
+
+    /** Returns true if this Matrix is diagonal (values smaller than epsilon are treated as 0). */
     public boolean isDiagonal() {
         for (int r = 1; r <= getHeight(); r++) {
             for (int c = 1; c <= getWidth(); c++) {
                 if (r == c) {
                     continue;
-                } else if (get(r, c) != 0) {
+                } else if (Math.abs(get(r, c)) >= epsilon) {
                     return false;
                 }
             }
         }
         return true;
     }
-    
+
     /** Returns true if this Matrix is upper triangular. 
      * 
      * @throws MatrixException */
@@ -169,17 +216,17 @@ public class SquareMatrix extends Matrix {
         }
         return true;
     }
-    
+
     /** Returns true if this Matrix is lower triangular. */
     public boolean isLowerTriangular() throws MatrixException {
         return getTranspose().isUpperTriangular();
     }
-    
+
     /** Returns true if this Matrix is triangular. */
     public boolean isTriangular() throws MatrixException {
         return isUpperTriangular() || isLowerTriangular();
     }
-    
+
     /** Sets _eigenvalues to contain the eigenvalues of this Matrix. 
      * 
      * @throws MatrixException */
@@ -189,10 +236,10 @@ public class SquareMatrix extends Matrix {
                 _eigenvalues.add(get(i, i));
             }
         } else {
-            
+
         }
     }
-    
+
     /** The row reduced form of this Matrix. */
     private SquareMatrix _rowRed;
 
@@ -201,28 +248,31 @@ public class SquareMatrix extends Matrix {
 
     /** The determinant of this Matrix. */
     private Double _det;
-    
+
     /** The trace of this Matrix. */ 
     private Double _trace;
-    
+
     /** The inverse of this Matrix. */
     private SquareMatrix _inverse;
 
     /** The transpose of this Matrix. */
     protected SquareMatrix _transpose;
-    
+
     /** The eigenvalues of this Matrix. */
     private ArrayList<Double> _eigenvalues;
-    
+
     /** The eigvenvectors of this Matrix. */
     private ArrayList<Vector> _eigenvectors;
-    
+
     /** True if the Matrix is diagonalisable. */
     private Boolean _diagonalisable;
-    
+
     /** The diagonalised form of this Matrix. */
     private SquareMatrix _diagonalised;
-    
-    /** The QR-Factorised form of this Matrix. */
 
+    /** Q from the QR-Factorised form of this Matrix. */
+    private SquareMatrix _Q;
+
+    /** R from the QR-Factorised form of this Matrix. */
+    private SquareMatrix _R;
 }

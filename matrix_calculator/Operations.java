@@ -11,8 +11,7 @@ public class Operations {
      *
      * @throws MatrixException */
     public static Matrix add(Matrix A, Matrix B) throws MatrixException {
-        if (!A.getDimension().equals(B.getDimension())) { // Check if ArrayList
-                                                          // equality works
+        if (!A.getDimension().equals(B.getDimension())) {
             throw new MatrixException("These two matrices do not have"
                             + " the appropriate dimension to be added/subtracted together.");
         }
