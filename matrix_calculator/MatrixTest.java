@@ -5,6 +5,7 @@ import org.junit.Test;
 
 public class MatrixTest {
 
+    @Test
     public void basicFunctionality() throws MatrixException {
         double[][] contents = {
                         { 5, 4, 6 },
@@ -30,6 +31,7 @@ public class MatrixTest {
         A.print();        
     }
 
+    @Test
     public void elementaryRowOperations() throws MatrixException {
         double[][] contents = {
                         { 5, 4, 6 },
@@ -54,6 +56,7 @@ public class MatrixTest {
         A.print();
     }
 
+    @Test
     public void transpose() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -73,7 +76,7 @@ public class MatrixTest {
         assertTrue(A.getTranspose().equals(B));
     }
 
-
+    @Test
     public void count() throws MatrixException {
         double[][] contents = {
                         { 5, 4, 6 },
@@ -93,6 +96,7 @@ public class MatrixTest {
         assertEquals(A.count(2, 3), 0);
     }
 
+    @Test
     public void basicOperations() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -124,6 +128,7 @@ public class MatrixTest {
         E.print();
     }
 
+    @Test
     public void multiplication() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },
@@ -165,6 +170,7 @@ public class MatrixTest {
         ITest.print();
     }
 
+    @Test
     public void rowReduction() throws MatrixException {
         double[][] contentsA = {
                         { 5, 4, 6 },

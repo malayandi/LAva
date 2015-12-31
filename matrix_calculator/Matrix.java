@@ -1,5 +1,7 @@
 package matrix_calculator;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /** A class representing the general Matrix object.
@@ -51,7 +53,7 @@ public class Matrix {
     public Boolean equals(Matrix A) {
         for (int r = 1; r <= A.getHeight(); r++) {
             for (int c = 1; c <= A.getWidth(); c++) {
-                if (get(r, c) != A.get(r, c)) {
+                if (Math.abs(get(r, c) - A.get(r, c)) >= epsilon) {
                     return false;
                 }
             }
@@ -64,13 +66,15 @@ public class Matrix {
         for (int r = 1; r <= getHeight(); r++) {
             System.out.print("[ ");
             for (int c = 1; c <= getWidth(); c++) {
-                System.out.print(get(r, c) + " ");
+                df.setRoundingMode(RoundingMode.HALF_UP);
+                double entry = get (r, c) + 0.0;
+                System.out.print(df.format(entry) + " ");
             }
             System.out.print("]");
             System.out.println("");
         }
     }
-    
+
     /** Sets _transpose to be the transpose of this Matrix. */
     public void transpose() throws MatrixException {
         Matrix T = new Matrix(getWidth(), getHeight(), new double[getWidth()][getHeight()]);
@@ -149,7 +153,7 @@ public class Matrix {
         }
         return _rowRedEF;
     }
-    
+
     /** Returns the transpose of this Matrix. */
     public Matrix getTranspose() throws MatrixException {
         if (_transpose == null) {
@@ -290,7 +294,7 @@ public class Matrix {
 
     /** The dimension of this Matrix. */
     private ArrayList<Integer> _dim;
-    
+
     /** The rank of this Matrix. */
     protected Integer _rank;
 
@@ -313,7 +317,14 @@ public class Matrix {
 
     /** The row reduced echelon form of this Matrix. */
     protected Matrix _rowRedEF;
-    
+
     /** The transpose of this Matrix. */
     protected Matrix _transpose;
+    
+    /** Two doubles are considered equal if they are within this margin. */
+    private static final double epsilon = 0.0001;
+    
+    /** The format of output for entries in the matrix. */
+    private static final DecimalFormat df = new DecimalFormat("#.####");
+
 }
