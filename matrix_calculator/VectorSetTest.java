@@ -11,10 +11,10 @@ public class VectorSetTest {
         assertEquals(Math.sqrt(30), vector.magnitude(), 0.1); // magnitude works
         assertEquals(4, vector.numRows()); // numrows works
         double[] normalized = vector.normalize();
-        assertEquals(0.033, normalized[0], .001);
-        assertEquals(.06666, normalized[1], .001);
-        assertEquals(0.1, normalized[2], 0);
-        assertEquals(.1333, normalized[3], .001); // normalization works
+        assertEquals(1.0 / Math.sqrt(30), normalized[0], 0);
+        assertEquals(2.0 / Math.sqrt(30), normalized[1], 0);
+        assertEquals(3.0 / Math.sqrt(30), normalized[2], 0);
+        assertEquals(4.0 / Math.sqrt(30), normalized[3], 0); // normalization works
         VectorSet set = new VectorSet(vector);
         assertEquals(set.size(), 1);
         set.gramSchmidt(0, null);
