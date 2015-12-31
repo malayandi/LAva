@@ -12,6 +12,28 @@ public class VectorSet {
             _vectors.add(vector);
         }
     }
+    
+
+    /** Converts this vector set into a matrix.
+     * 
+     * @throws MatrixException */
+    public Matrix matricize() throws MatrixException {
+        double[][] contents = new double[_vectors.get(0).numRows()][size()];
+        int count = 0;
+        for (Vector vector : _vectors) {
+            for (int row = 0; row < vector.numRows(); row++) {
+                contents[row][count] = vector.values()[row];
+            }
+            count++;
+        }
+        Matrix matrix;
+        if (_vectors.get(0).numRows() == size()) {
+            matrix = new SquareMatrix(size(), contents);
+        } else {
+            matrix = new Matrix(_vectors.get(0).numRows(), size(), contents);
+        }
+        return matrix;
+    }
 
     /** Performs the Gram-Schmidt process on this vector set. */
     public VectorSet gramSchmidt(int count, VectorSet initial) {
@@ -70,7 +92,64 @@ public class VectorSet {
         }
         return matrix;
     }
+    
+    /** Returns the coordinates of x given coordinate-vector VECTOR and this
+     * vector set. */
+    public Vector coordinates(Vector coordinateVector) {
+        // assert that this vector set is a basis
+        double[] values = new double[coordinateVector.numRows()];
+        int count = 0;
+        for (Vector b : _vectors) {
+            for (int counter = 0; counter < coordinateVector.numRows(); counter++) {
+                values[counter] += coordinateVector.values()[count] * b.values()[counter];
+                System.out.println(values[counter]);
+            }
+            count++;
+        }
+        Vector coordinates = new Vector(values);
+        return coordinates;
+    }
 
+    /** Returns the coordinate-vector of Vector VECTOR with respect to this
+     * vector set.
+     * 
+     * @throws MatrixException */
+    public Matrix coordinateVector(Vector vector) throws MatrixException {
+        SquareMatrix matrix = (SquareMatrix) matricize();
+        SquareMatrix inverse = matrix.getInverse();
+        Matrix coordinateVector = vector.matricize();
+        coordinateVector = Operations.matrixMult(inverse, coordinateVector);
+        return coordinateVector;
+    }
+
+    /** If this vector set is a basis w/ respect to c, given coordinateVector
+     * [x]b, return [x]c. */
+    public Vector cCoordinate(Vector coordinateVector) {
+        return coordinates(coordinateVector);
+    }
+
+    /** Returns the change of basis matrix from this VectorSet to another
+     * VectorSet SET. */
+    public Matrix changeOfBasis(VectorSet set) throws MatrixException {
+        Matrix B = matricize();
+        Matrix C = set.matricize();
+        Matrix changeOfBasis = B.changeOfBasis(C);
+        return changeOfBasis;
+    }
+
+    /** Prints this VectorSet in the standard output. */
+    public void print() {
+        if (size() == 0) {
+            System.out.println("This set is empty");
+        } else {
+            for (int index = 0; index < _vectors.get(0).numRows(); index++) {
+                for (Vector vector : _vectors) {
+                    System.out.print("[ " + vector.get(index) + "]");
+                }
+                System.out.println("");
+            }
+        }
+    }
 
     /** Returns an ArrayList containing the vectors within this set. */
     public int size() {

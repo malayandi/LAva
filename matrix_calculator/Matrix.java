@@ -134,6 +134,68 @@ public class Matrix {
         }
     }
 
+    /** Returns the change of basis Matrix given another Matrix MATRIX.
+     * 
+     * @throws MatrixException */
+    public Matrix changeOfBasis(Matrix matrix) throws MatrixException {
+        if (matrix.getHeight() != getHeight() || matrix.getWidth() != getWidth()) {
+            throw new MatrixException("The numbers of vectors do not match.");
+        }
+        Matrix B = Operations.matrixCopy(this);
+        int pivot = 1;
+        for (int c = 1; c <= B.getWidth(); c++) {
+            if (matrix.get(pivot, c) == 0) {
+                int k = pivot + 1;
+                while (matrix.get(k, c) == 0) {
+                    k++;
+                }
+                B.switchRow(pivot, k);
+                matrix.switchRow(pivot, k);
+            }
+            for (int r = pivot + 1; r <= B.getHeight(); r++) {
+                B.add(pivot, r, -1 * matrix.get(r, c) / matrix.get(pivot, c));
+                matrix.add(pivot, r, -1 * matrix.get(r, c) / matrix.get(pivot, c));
+            }
+            B.scalarMultRow(pivot, 1 / matrix.get(pivot, c));
+            matrix.scalarMultRow(pivot, 1 / matrix.get(pivot, c));
+            pivot++;
+        }
+        for (int r = 2; r <= getHeight(); r++) {
+            for (int row = r - 1; row > 0; row--) {
+                B.add(r, row, -1 * matrix.get(row, r));
+                matrix.add(r, row, -1 * matrix.get(row, r));
+            }
+        }
+        return B;
+    }
+
+    /** Returns the basis for the column space of this matrix.
+     * 
+     * @throws MatrixException */
+    public VectorSet columnSpace() throws MatrixException {
+        ArrayList<Integer> columns = new ArrayList<>();
+        VectorSet basis = new VectorSet();
+        int count;
+        for (double[] column : getRowRed()._contents) {
+            count = 0;
+            for (double value : column) {
+                if (value != 0) {
+                    columns.add(count);
+                    break;
+                }
+                count++;
+            }
+        }
+        for (int column : columns) {
+            double[] vector = new double[_contents.length];
+            for (int index = 0; index < _contents.length; index++) {
+                vector[index] = get(index + 1, column + 1);
+            }
+            basis.add(new Vector(vector));
+        }
+        return basis;
+    }
+
     /** Returns the row reduced form of this Matrix.
      *
      * @throws MatrixException */

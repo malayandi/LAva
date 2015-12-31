@@ -10,12 +10,19 @@ public class Vector {
         _values = args;
         _numRows = args.length;
         _normalization = new double[_numRows];
-        double counter = 0;
-        for (double value : _values) {
-            counter += value * value;
-        }
-        _magnitude = counter;
         _normalized = false;
+    }
+    
+    /** Converts this vector into an nx1 Matrix.
+     * 
+     * @throws MatrixException */
+    public Matrix matricize() throws MatrixException {
+        double[][] contents = new double[_numRows][1];
+        for (int row = 0; row < _numRows; row++) {
+            contents[row][0] = _values[row];
+        }
+        Matrix matrix = new Matrix(_numRows, 1, contents);
+        return matrix;
     }
     
     /** Returns an array representing the normalized vector. */
@@ -31,6 +38,17 @@ public class Vector {
         return _normalization;
     }
     
+    /** Prints out this Matrix on the standard output. */
+    public void print() {
+        for (int row = 0; row < _numRows; row++) {
+            System.out.print("[");
+            System.out.print(_values[row]);
+            System.out.print("]");
+            System.out.println("");
+        }
+    }
+
+    /** Returns the dot product of this vector and vector V. */
     public double dotProduct(Vector v) {
         double result = 0;
         for (int i = 0; i < numRows(); i++) {
@@ -46,6 +64,10 @@ public class Vector {
 
     /** Returns the magnitude of this vector. */
     public double magnitude() {
+       _magnitude = 0;
+       for (double value : _values) {
+           _magnitude += value * value;
+            }
         return _magnitude;
     }
 
@@ -54,9 +76,9 @@ public class Vector {
         return _values;
     }
     
-    /** Returns the entry at index K. */
-    public double get(int k) {
-        return _values[k];
+    /** Returns the value at the specified index INDEX. */
+    public double get(int index) {
+        return _values[index];
     }
 
     /** Boolean indicating whether the vector has been normalized. */
