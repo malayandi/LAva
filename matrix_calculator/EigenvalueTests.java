@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 public class EigenvalueTests {
-
-    // to test: QR
     
     @Test
     public void conversion() throws MatrixException {
@@ -123,6 +121,22 @@ public class EigenvalueTests {
         for (int i = 0; i < eigenvaluesC.length; i++) {
             assertEquals(eigenvaluesC[i], C.getEigenvalues().get(i), 0.0001);
         }
+    }
+    
+    @Test
+    public void nullSpace() throws MatrixException {
+        double[][] contentsA = {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 9 }
+        };
+        SquareMatrix A = new SquareMatrix(3, contentsA);
+        
+        double[] contents = { 1.0, -2.0, 1.0 };
+        Vector v = new Vector(contents);
+        
+        assertEquals(A.nullSpace().size(), 1);
+        assertTrue(A.nullSpace().get(0).equals(v));
 
     }
 

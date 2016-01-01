@@ -8,8 +8,6 @@ import java.util.ArrayList;
  *
  * @author AndyPalan */
 
-// STILL TO DO: BASIS FOR NULL SPACE AND RANGE
-
 public class Matrix {
 
     /** Creates a new ROW x COL square Matrix with contents CONTENTS. */
@@ -94,6 +92,7 @@ public class Matrix {
      * @throws MatrixException */
     public void rowReduction(Boolean EF) throws MatrixException {
         Matrix B = Operations.matrixCopy(this);
+        _pivots = new ArrayList<Integer>();
         int pivot = 1;
         for (int c = 1; c <= B.getWidth(); c++) {
             if (B.count(c, pivot) == 0) {
@@ -118,6 +117,7 @@ public class Matrix {
                 }
             }
             B.scalarMultRow(pivot, 1 / B.get(pivot, c));
+            _pivots.add(c);
             pivot++;
         }
         if (EF == true) {
@@ -158,6 +158,7 @@ public class Matrix {
             }
             B.scalarMultRow(pivot, 1 / matrix.get(pivot, c));
             matrix.scalarMultRow(pivot, 1 / matrix.get(pivot, c));
+            
             pivot++;
         }
         for (int r = 2; r <= getHeight(); r++) {
@@ -194,6 +195,61 @@ public class Matrix {
             basis.add(new Vector(vector));
         }
         return basis;
+    }
+    
+    /** Returns the basis for the null space of this Matrix as a VectorSet. */
+    public VectorSet nullSpace() throws MatrixException {
+        if (isLinInd()) {
+            double[] zeroes = new double[getHeight()];
+            Vector zero = new Vector(zeroes);
+            return new VectorSet(zero);
+        }
+        // rowReduction(true);
+        // the code only adds stuff into _pivots if I run the above line but
+        // I shouldn't have to since the line just below this should automatically
+        // call the above line
+        Matrix RREF = getRowRedEF();
+        Vector[] result = new Vector[getNullity()];
+        int count = 0;
+        for (int c = 1; c <= getWidth(); c++) {
+            double[] current = new double[getWidth()];
+            if (_pivots.contains(c)) {
+                continue;
+            }
+            current[c - 1] = 1;
+//          CAN POSSIBLY BE REMOVED;
+//          THIS EDGE CASE SHOULD BE COVERED BY REGULAR ALGORITHM
+//            if (RREF.isZero(c)) {
+//                result[count] = new Vector(current);
+//                count++;
+//                continue;
+//            }
+            int r = 1;
+            for (int p : _pivots) {
+                while (RREF.get(r, p) < epsilon) {
+                    r++;
+                }
+                if (RREF.get(r, c) < epsilon) {
+                    current[p - 1] = 0;
+                    continue;
+                } else {
+                    current[p - 1] = -RREF.get(r, c);
+                }
+            }
+            result[count] = new Vector(current);
+            count++;
+        }
+        return new VectorSet(result);
+    }
+    
+    /** Returns true if a column contains only zeroes. */
+    public boolean isZero(int c) {
+        for (int r = 1; r <= getHeight(); r++) {
+            if (get(r, c) >= epsilon) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Returns the row reduced form of this Matrix.
@@ -369,6 +425,9 @@ public class Matrix {
 
     /** The dimension of this Matrix. */
     private ArrayList<Integer> _dim;
+    
+    /** The pivot columns of this Matrix. */
+    private ArrayList<Integer> _pivots;
 
     /** The rank of this Matrix. */
     protected Integer _rank;

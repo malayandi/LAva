@@ -101,6 +101,16 @@ public class Vector {
         }
         return true;
     }
+    
+    /** Returns true if this vector is equal to vector V. */
+    public boolean equals(Vector v) {
+        for (int i = 0; i < numRows(); i++) {
+            if (Math.abs(v.get(i) - get(i)) >= Matrix.epsilon) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /** Boolean indicating whether the vector has been normalized. */
     private boolean _normalized;
