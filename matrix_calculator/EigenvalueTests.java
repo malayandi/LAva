@@ -2,6 +2,8 @@ package matrix_calculator;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 public class EigenvalueTests {
@@ -34,7 +36,7 @@ public class EigenvalueTests {
     public void triangular() throws MatrixException {
         double[][] contentsA = {
                         { 1, 2 },
-                        { 0.000001, 4 }
+                        { 0.000000001, 4 }
         };
         SquareMatrix A = new SquareMatrix(2, contentsA);
 
@@ -42,7 +44,7 @@ public class EigenvalueTests {
         assertTrue(A.isTriangular());
         
         double[][] contentsB = {
-                        { 1, 0.000001 },
+                        { 1, 0.000000001 },
                         { 2, 4 }
         };
         SquareMatrix B = new SquareMatrix(2, contentsB);
@@ -50,8 +52,8 @@ public class EigenvalueTests {
         assertTrue(B.isTriangular());
         
         double[][] contentsC = {
-                        { 1, 0.000001 },
-                        { 0.000001, 4 }
+                        { 1, 0.000000001 },
+                        { 0.0000000001, 4 }
         };
         SquareMatrix C = new SquareMatrix(2, contentsC);
         assertTrue(C.isDiagonal());
@@ -80,9 +82,48 @@ public class EigenvalueTests {
         };
         SquareMatrix R = new SquareMatrix(3, contentsR);
 
-        A.getQ().print();
-        System.out.println("hello");
-        A.getR().print();
+        assertTrue(A.getQ().equals(Q));
+        assertTrue(A.getR().equals(R));
+    }
+    
+    @Test
+    public void eigenvalues() throws MatrixException {
+        double[][] contentsA = {
+                        { 1, 2, 3 },
+                        { 0, 4, 5 },
+                        { 0, 0, 6 }
+        };
+        SquareMatrix A = new SquareMatrix(3, contentsA);
+        Double[] eigenvaluesA = {1.0, 4.0, 6.0};
+        
+        for (int i = 0; i < eigenvaluesA.length; i++) {
+            assertEquals(eigenvaluesA[i], A.getEigenvalues().get(i));
+        }
+        
+        double[][] contentsB = {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 8, 8, 9 }
+        };
+        SquareMatrix B = new SquareMatrix(3, contentsB);
+        Double[] eigenvaluesB = {16.2787, -1.4095, 0.1308};
+        
+        for (int i = 0; i < eigenvaluesB.length; i++) {
+            assertEquals(eigenvaluesB[i], B.getEigenvalues().get(i), 0.0001);
+        }
+
+        double[][] contentsC = {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 9 }
+        };
+        SquareMatrix C = new SquareMatrix(3, contentsC);
+        Double[] eigenvaluesC = { 16.1168, -1.1168, 0.0 };
+        
+        for (int i = 0; i < eigenvaluesC.length; i++) {
+            assertEquals(eigenvaluesC[i], C.getEigenvalues().get(i), 0.0001);
+        }
+
     }
 
 }

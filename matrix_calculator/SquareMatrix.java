@@ -232,15 +232,28 @@ public class SquareMatrix extends Matrix {
      * 
      * @throws MatrixException */
     public void eigenvalues() throws MatrixException {
-        if (isTriangular() || isDiagonal()) {
-            for (int i = 1; i <= getHeight(); i++) {
-                _eigenvalues.add(get(i, i));
+        _eigenvalues = new ArrayList<Double>();
+        SquareMatrix A = this;
+        if (!(isTriangular() || isDiagonal())) {
+            SquareMatrix Q = getQ();
+            SquareMatrix R = getR();
+            A = Operations.matrixMult(R, Q);
+            while (!A.isTriangular()) {
+                Q = A.getQ();
+                R = A.getR();
+                A = Operations.matrixMult(R, Q);
             }
-        } else {
-            SquareMatrix A = Operations.matrixCopy(this);
-            SquareMatrix Q = A.getQ();
-            SquareMatrix R = A.getR();
         }
+        for (int i = 1; i <= getHeight(); i++) {
+            _eigenvalues.add(A.get(i, i));
+        }
+    }
+    
+    public ArrayList<Double> getEigenvalues() throws MatrixException {
+        if (_eigenvalues == null) {
+            eigenvalues();
+        }
+        return _eigenvalues;
     }
 
     /** The row reduced form of this Matrix. */

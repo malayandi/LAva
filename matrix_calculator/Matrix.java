@@ -21,6 +21,7 @@ public class Matrix {
         _dim.add(row);
         _dim.add(col);
         _contents = contents;
+        df.setRoundingMode(RoundingMode.HALF_UP);
     }
 
     /** Returns the double at row R and col C. */
@@ -66,7 +67,6 @@ public class Matrix {
         for (int r = 1; r <= getHeight(); r++) {
             System.out.print("[ ");
             for (int c = 1; c <= getWidth(); c++) {
-                df.setRoundingMode(RoundingMode.HALF_UP);
                 double entry = get (r, c) + 0.0;
                 System.out.print(df.format(entry) + " ");
             }
@@ -397,9 +397,9 @@ public class Matrix {
     protected Matrix _transpose;
     
     /** Two doubles are considered equal if they are within this margin. */
-    protected static final double epsilon = 0.0001;
+    protected static final double epsilon = 0.0000001;
     
     /** The format of output for entries in the matrix. */
-    private static final DecimalFormat df = new DecimalFormat("#.####");
+    protected static final DecimalFormat df = new DecimalFormat("#.####");
 
 }

@@ -12,7 +12,7 @@ public class Vector {
         _normalization = new double[_numRows];
         _normalized = false;
     }
-    
+
     /** Converts this vector into an nx1 Matrix.
      * 
      * @throws MatrixException */
@@ -24,7 +24,7 @@ public class Vector {
         Matrix matrix = new Matrix(_numRows, 1, contents);
         return matrix;
     }
-    
+
     /** Returns an array representing the normalized vector. */
     public double[] normalize() {
         if (!_normalized) {
@@ -33,14 +33,18 @@ public class Vector {
                 magnitude();
             }
             for (double value : _values) {
-                _normalization[count] = ((double) value / _magnitude);
+                if (Math.abs(value) < Matrix.epsilon) {
+                    _normalization[count] = 0;
+                } else {
+                    _normalization[count] = ((double) value / _magnitude);
+                }
                 count++;
             }
             _normalized = true;
         }
         return _normalization;
     }
-    
+
     /** Prints out this Matrix on the standard output. */
     public void print() {
         for (int row = 0; row < _numRows; row++) {
@@ -67,22 +71,35 @@ public class Vector {
 
     /** Returns the magnitude of this vector. */
     public double magnitude() {
-       _magnitude = (double) 0;
-       for (double value : _values) {
-           _magnitude += value * value;
+        _magnitude = (double) 0;
+        for (double value : _values) {
+            if (Math.abs(value) < Matrix.epsilon) {
+                continue;
             }
-       _magnitude = Math.sqrt(_magnitude);
-       return _magnitude;
+            _magnitude += value * value;
+        }
+        _magnitude = Math.sqrt(_magnitude);
+        return _magnitude;
     }
 
     /** Returns the entries of this vector. */
     public double[] values() {
         return _values;
     }
-    
+
     /** Returns the value at the specified index INDEX. */
     public double get(int index) {
         return _values[index];
+    }
+
+    /** Returns true if all the entries of this vector are 0. */
+    public boolean isZero() {
+        for (double v : _values) {
+            if (v >= Matrix.epsilon) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Boolean indicating whether the vector has been normalized. */

@@ -67,14 +67,26 @@ public class VectorSet {
     public VectorSet orthonormalise() {
         Vector[] result = new Vector[size()];
         for (int i = 0; i < size(); i++) {
-            result[i] = new Vector(_vectors.get(i).normalize());
+            Vector r = new Vector(_vectors.get(i).normalize());
+            result[i] = r;
         }
         return new VectorSet(result);
     }
     
-    /** Returns a Matrix containing the vectors of this set as its columns. 
+    /** Returns a Matrix containing the vectors of this set as its columns,
+     * sending all zero vectors to the end of this matrix. 
      * @throws MatrixException */
     public Matrix toMatrix() throws MatrixException {
+        ArrayList<Vector> vectors = new ArrayList<>();
+        for (Vector v : _vectors) {
+            vectors.add(v);
+        }
+        for (Vector v : _vectors) {
+            if (v.isZero()) {
+                vectors.remove(v);
+                vectors.add(v);
+            }
+        }
         int h = _vectors.get(0).numRows();
         int w = _vectors.size();
         Matrix matrix = new Matrix(h, w, new double[h][w]);
@@ -87,13 +99,23 @@ public class VectorSet {
         return matrix;
     }
     
-    /** Returns a Square Matrix containing the vectors of this set as its columns. 
+    /** Returns a Square Matrix containing the vectors of this set as its columns,
+     * sending all zero vectors to the end of this matrix. 
      * @throws MatrixException */
     public SquareMatrix toSquareMatrix() throws MatrixException {
+        ArrayList<Vector> vectors = new ArrayList<>();
+        for (Vector v : _vectors) {
+            vectors.add(v);
+        }
+        for (Vector v : _vectors) {
+            if (v.isZero()) {
+                vectors.remove(v);
+                vectors.add(v);
+            }
+        }
         int h = _vectors.get(0).numRows();
-        int w = _vectors.size();
-        SquareMatrix matrix = new SquareMatrix(h, new double[h][w]);
-        for (int c = 0; c < w; c++) {
+        SquareMatrix matrix = new SquareMatrix(h, new double[h][h]);
+        for (int c = 0; c < h; c++) {
             Vector v = get(c);
             for (int r = 0; r < h; r++) {
                 matrix.set(r + 1, c + 1, v.get(r));
@@ -153,7 +175,7 @@ public class VectorSet {
         } else {
             for (int index = 0; index < _vectors.get(0).numRows(); index++) {
                 for (Vector vector : _vectors) {
-                    System.out.print("[ " + vector.get(index) + "]");
+                    System.out.print("[ " + Matrix.df.format(vector.get(index)) + "]");
                 }
                 System.out.println("");
             }
