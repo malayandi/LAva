@@ -229,12 +229,7 @@ public class Matrix {
                 while (RREF.get(r, p) < epsilon) {
                     r++;
                 }
-                if (RREF.get(r, c) < epsilon) {
-                    current[p - 1] = 0;
-                    continue;
-                } else {
-                    current[p - 1] = -RREF.get(r, c);
-                }
+                current[p - 1] = -RREF.get(r, c);
             }
             result[count] = new Vector(current);
             count++;
@@ -427,7 +422,7 @@ public class Matrix {
     private ArrayList<Integer> _dim;
     
     /** The pivot columns of this Matrix. */
-    private ArrayList<Integer> _pivots;
+    protected ArrayList<Integer> _pivots;
 
     /** The rank of this Matrix. */
     protected Integer _rank;

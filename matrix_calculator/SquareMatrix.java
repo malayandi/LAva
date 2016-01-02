@@ -22,6 +22,7 @@ public class SquareMatrix extends Matrix {
     public void squareRowReduction(Boolean EF) throws MatrixException {
         SquareMatrix B = Operations.matrixCopy(this);
         SquareMatrix I = new SquareMatrix(getHeight(), new double[getHeight()][getHeight()]);
+        _pivots = new ArrayList<Integer>();
         for (int r = 1; r <= I.getHeight(); r++) {
             I.set(r, r, 1);
         }
@@ -57,6 +58,7 @@ public class SquareMatrix extends Matrix {
             B.scalarMultRow(pivot, factor);
             I.scalarMultRow(pivot, factor);
             det *= (1 / factor);
+            _pivots.add(c);
             pivot++;
         }
         if (EF == true) {
