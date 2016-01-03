@@ -242,8 +242,14 @@ public class SquareMatrix extends Matrix {
             A = Operations.matrixMult(R, Q);
             while (!A.isTriangular()) {
                 Q = A.getQ();
+//                Q.print();
+//                System.out.println("");
                 R = A.getR();
+//                R.print();
+//                System.out.println("");
                 A = Operations.matrixMult(R, Q);
+//                A.print();
+//                System.out.println("");
             }
         }
         for (int i = 1; i <= getHeight(); i++) {
@@ -251,11 +257,42 @@ public class SquareMatrix extends Matrix {
         }
     }
     
+    /** Returns an ArrayList containing the eigenvalues of this Matrix. */
     public ArrayList<Double> getEigenvalues() throws MatrixException {
         if (_eigenvalues == null) {
             eigenvalues();
         }
         return _eigenvalues;
+    }
+    
+    /** Sets _eigenvectors to contain the eigenvectors of this Matrix. */
+    public void eigenvectors() throws MatrixException {
+        ArrayList<Double> eigenvalues = getEigenvalues();
+        ArrayList<Double> computed = new ArrayList<>();
+        ArrayList<Vector> eigenvectors = new ArrayList<>();
+        for (double value : eigenvalues) {
+            if (computed.contains(value)) {
+                continue;
+            }
+            SquareMatrix copy = Operations.matrixCopy(this);
+            for (int i = 1; i <= getHeight(); i++) {
+                copy.set(i, i, get(i, i) - value);
+            }
+            VectorSet vectors = copy.nullSpace();
+            for (int i = 0; i < vectors.size(); i++) {
+                eigenvectors.add(vectors.get(i));
+            }
+            computed.add(value);
+        }
+        _eigenvectors = eigenvectors;
+    }
+    
+    /** Returns an ArrayList of vectors containing the eigenvectors of this Matrix. */
+    public ArrayList<Vector> getEigenvectors() throws MatrixException {
+        if (_eigenvectors == null) {
+            eigenvectors();
+        }
+        return _eigenvectors;
     }
 
     /** The row reduced form of this Matrix. */

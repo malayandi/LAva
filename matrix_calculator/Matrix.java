@@ -451,7 +451,7 @@ public class Matrix {
     protected Matrix _transpose;
     
     /** Two doubles are considered equal if they are within this margin. */
-    protected static final double epsilon = 0.0000001;
+    protected static final double epsilon = 0.00001;
     
     /** The format of output for entries in the matrix. */
     protected static final DecimalFormat df = new DecimalFormat("#.####");

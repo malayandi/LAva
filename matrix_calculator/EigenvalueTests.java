@@ -138,6 +138,75 @@ public class EigenvalueTests {
         assertEquals(A.nullSpace().size(), 1);
         assertTrue(A.nullSpace().get(0).equals(v));
 
+        double[][] contentsB = {
+                        { 1, 2, 3, 4 },
+                        { 4, 5, 6, 7 },
+                        { 7, 8, 9, 10 }
+        };
+        Matrix B = new Matrix(3, 4, contentsB);
+        
+        double[] c1 = { 1.0, -2.0, 1.0, 0.0 };
+        double[] c2 = { 2.0, -3.0, 0.0, 1.0 };
+        Vector v1 = new Vector(c1); 
+        Vector v2 = new Vector(c2);
+        
+        assertEquals(B.nullSpace().size(), 2);
+        assertTrue(B.nullSpace().get(0).equals(v1));
+        assertTrue(B.nullSpace().get(1).equals(v2));      
     }
 
+    @Test
+    public void eigenvector() throws MatrixException {
+        double[][] contentsA = {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 9 }
+        };
+        SquareMatrix A = new SquareMatrix(3, contentsA);
+
+        double[] c1 = { 0.283349, 0.641675, 1 };
+        Vector v1 = new Vector(c1);
+        double[] c2 = { -1.28335, -0.141675, 1 };
+        Vector v2 = new Vector(c2);
+        double[] c3 = { 1, -2, 1 };
+        Vector v3 = new Vector(c3);
+        
+        ArrayList<Vector> eigenvectors = A.getEigenvectors();
+                
+        assertEquals(eigenvectors.size(), 3);
+        assertTrue(eigenvectors.get(0).equals(v1));
+//        assertTrue(eigenvectors.get(1).equals(v2));
+        assertTrue(eigenvectors.get(2).equals(v3));
+        
+        double[][] contentsB = {
+                        { 1, 2, 3, 4 },
+                        { 5, 6, 7, 8 },
+                        { 9, 10, 11, 12 },
+                        { 13, 14, 15, 16 }
+        };
+        SquareMatrix B = new SquareMatrix(4, contentsB);
+
+        double[] d1 = { 0.202782, 0.468521, 0.734261, 1 };
+        Vector w1 = new Vector(d1);
+        double[] d2 = { -1.20278, -0.468521, 0.265739, 1 };
+        Vector w2 = new Vector(d2);
+        double[] d3 = { 2, -3, 0, 1 };
+        Vector w3 = new Vector(d3);
+        double[] d4 = { 1, -2, 1, 0 };
+        Vector w4 = new Vector(d4);
+        
+        ArrayList<Vector> eigenvectorsB = B.getEigenvectors();
+        
+        for (Vector v : B.getEigenvectors()) {
+            v.print();
+            System.out.println("");
+        }
+        
+        assertEquals(eigenvectorsB.size(), 4);
+        assertTrue(eigenvectorsB.get(0).equals(w1));
+        assertTrue(eigenvectorsB.get(1).equals(w2));
+        assertTrue(eigenvectorsB.get(2).equals(w3));
+        assertTrue(eigenvectorsB.get(3).equals(w4));
+
+    }
 }

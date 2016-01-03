@@ -12,7 +12,6 @@ public class VectorSet {
             _vectors.add(vector);
         }
     }
-    
 
     /** Converts this vector set into a matrix.
      * 
@@ -47,7 +46,11 @@ public class VectorSet {
             for (int index = 0; index < u.values().length; index++) {
                 coefficient += u.values()[index] * next.values()[index];
             }
-            coefficient = coefficient / (next.magnitude() * next.magnitude());
+            if (next.magnitude() < Matrix.epsilon) {
+                coefficient = 0;
+            } else {
+                coefficient = coefficient / (next.magnitude() * next.magnitude());
+            }
             for (int index = 0; index < next.numRows(); index++) {
                 u.values()[index] -= coefficient * next.values()[index];
             }
@@ -62,7 +65,7 @@ public class VectorSet {
             return initial;
         }
     }
-    
+
     /** Returns a VectorSet containing orthonormalised vectors from this set. */
     public VectorSet orthonormalise() {
         Vector[] result = new Vector[size()];
@@ -72,7 +75,7 @@ public class VectorSet {
         }
         return new VectorSet(result);
     }
-    
+
     /** Returns a Matrix containing the vectors of this set as its columns,
      * sending all zero vectors to the end of this matrix. 
      * @throws MatrixException */
@@ -98,7 +101,7 @@ public class VectorSet {
         }
         return matrix;
     }
-    
+
     /** Returns a Square Matrix containing the vectors of this set as its columns,
      * sending all zero vectors to the end of this matrix. 
      * @throws MatrixException */
@@ -123,7 +126,7 @@ public class VectorSet {
         }
         return matrix;
     }
-    
+
     /** Returns the coordinates of x given coordinate-vector VECTOR and this
      * vector set. */
     public Vector coordinates(Vector coordinateVector) {

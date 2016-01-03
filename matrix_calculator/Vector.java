@@ -49,7 +49,7 @@ public class Vector {
     public void print() {
         for (int row = 0; row < _numRows; row++) {
             System.out.print("[");
-            System.out.print(_values[row]);
+            System.out.print(Matrix.df.format(_values[row]));
             System.out.print("]");
             System.out.println("");
         }
