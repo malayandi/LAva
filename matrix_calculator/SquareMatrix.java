@@ -29,35 +29,55 @@ public class SquareMatrix extends Matrix {
         int pivot = 1;
         double det = 1;
         for (int c = 1; c <= B.getWidth(); c++) {
+            // Check for free column
             if (B.count(c, pivot) == 0) {
                 continue;
-            } else if (B.get(pivot, c) == 0) {
-                int k = pivot + 1;
-                while (B.get(k, c) == 0) {
-                    k++;
-                }
-                B.switchRow(pivot, k);
-                I.switchRow(pivot, k);
-                det *= -1;
             }
+            
+            // Swap pivot with largest absolute value
+            int max = pivot;
+            for (int i = pivot + 1; i <= B.getHeight(); i++) {
+                if (Math.abs(B.get(i, c)) > Math.abs(B.get(max, c))) {
+                    max = i;
+                }
+            }
+            if (max != pivot) {
+                B.switchRow(pivot, max);
+                I.switchRow(pivot, max);
+                det *= -1;
+//                B.print();
+//                System.out.println("");
+            }
+
+            // Scale the row for the pivot to have value 1
+            double scalefactor = 1 / B.get(pivot, c);
+            B.scalarMultRow(pivot, scalefactor);
+            I.scalarMultRow(pivot, scalefactor);
+            det *= (1 / scalefactor);
+//            B.print();
+//            System.out.println("");
+            
+
+            // Elimination
             if (EF == true) {
                 for (int r = 1; r <= B.getHeight(); r++) {
                     if (r == pivot) {
                         continue;
                     }
-                    double factor = -1 * B.get(r, c) / B.get(pivot, c);
-                    B.add(pivot, r, factor);
-                    I.add(pivot, r, factor);
+                    double elimfactor = -1 * B.get(r, c) / B.get(pivot, c);
+                    B.add(pivot, r, elimfactor);
+                    I.add(pivot, r, elimfactor);
+//                    B.print();
+//                    System.out.println("");
                 }
             } else {
                 for (int r = pivot + 1; r <= B.getHeight(); r++) {
-                    B.add(pivot, r, -1 * B.get(r, c) / B.get(pivot, c));
+                    double elimfactor = -1 * B.get(r, c) / B.get(pivot, c);
+                    B.add(pivot, r, elimfactor);
+//                    B.print();
+//                    System.out.println("");
                 }
             }
-            double factor = 1 / B.get(pivot, c);
-            B.scalarMultRow(pivot, factor);
-            I.scalarMultRow(pivot, factor);
-            det *= (1 / factor);
             _pivots.add(c);
             pivot++;
         }
@@ -284,6 +304,9 @@ public class SquareMatrix extends Matrix {
             }
             computed.add(value);
         }
+        for (Vector v : eigenvectors) {
+            v.scaleWholeNum();
+        }
         _eigenvectors = eigenvectors;
     }
     
@@ -294,7 +317,43 @@ public class SquareMatrix extends Matrix {
         }
         return _eigenvectors;
     }
+    
+    /** Returns true if this Matrix is diagonalisable. 
+     * 
+     * @throws MatrixException */
+    public boolean isDiagonalisable() throws MatrixException {
+        return (getEigenvectors().size() == getWidth());
+    }
+    
+    /** Sets _diagonalised to contain P, D, P-1 (in that order) where
+     * this matrix, A is expressed as A = PDP-1 and D is a diagonal matrix. */
+    public void diagonalise() throws MatrixException {
+        Vector[] vectors = new Vector[getWidth()];
+        SquareMatrix D = new SquareMatrix(getWidth(), new double[getWidth()][getWidth()]);
+        ArrayList<SquareMatrix> result = new ArrayList<>();
 
+        for (int i = 0; i < getWidth(); i++) {
+            vectors[i] = getEigenvectors().get(i);
+            D.set(i + 1, i + 1, getEigenvalues().get(i));
+        }
+        
+        VectorSet eigenvectors = new VectorSet(vectors);
+        SquareMatrix P = eigenvectors.toSquareMatrix(); 
+        
+        result.add(P);
+        result.add(D);
+        result.add(P.getInverse());
+    }
+    
+    /** Returns an ArrayList containing P, D, P-1 (in that order) where
+     * this matrix, A is expressed as A = PDP-1 and D is a diagonal matrix. */
+    public ArrayList<SquareMatrix> getDiagonalised() throws MatrixException {
+        if (_diagonalised == null) {
+            diagonalise();
+        }
+        return _diagonalised;
+    }
+    
     /** The row reduced form of this Matrix. */
     private SquareMatrix _rowRed;
 
@@ -316,14 +375,11 @@ public class SquareMatrix extends Matrix {
     /** The eigenvalues of this Matrix. */
     private ArrayList<Double> _eigenvalues;
 
-    /** The eigvenvectors of this Matrix. */
+    /** The eigenvectors of this Matrix. */
     private ArrayList<Vector> _eigenvectors;
 
-    /** True if the Matrix is diagonalisable. */
-    private Boolean _diagonalisable;
-
-    /** The diagonalised form of this Matrix. */
-    private SquareMatrix _diagonalised;
+    /** The matrices, P, D and P-1 where this matrix, A = PDP-1 and D is diagonal. */
+    private ArrayList<SquareMatrix> _diagonalised;
 
     /** Q from the QR-Factorised form of this Matrix. */
     private SquareMatrix _Q;

@@ -8,6 +8,8 @@ import org.junit.Test;
 
 public class EigenvalueTests {
     
+    // TO DO: Test diagonalisation, debug eigenvector
+    
     @Test
     public void conversion() throws MatrixException {
         double[][] contentsA = {
@@ -34,7 +36,7 @@ public class EigenvalueTests {
     public void triangular() throws MatrixException {
         double[][] contentsA = {
                         { 1, 2 },
-                        { 0.000000001, 4 }
+                        { 0.0000000000001, 4 }
         };
         SquareMatrix A = new SquareMatrix(2, contentsA);
 
@@ -42,7 +44,7 @@ public class EigenvalueTests {
         assertTrue(A.isTriangular());
         
         double[][] contentsB = {
-                        { 1, 0.000000001 },
+                        { 1, 0.000000000001 },
                         { 2, 4 }
         };
         SquareMatrix B = new SquareMatrix(2, contentsB);
@@ -50,8 +52,8 @@ public class EigenvalueTests {
         assertTrue(B.isTriangular());
         
         double[][] contentsC = {
-                        { 1, 0.000000001 },
-                        { 0.0000000001, 4 }
+                        { 1, 0.000000000001 },
+                        { 0.0000000000001, 4 }
         };
         SquareMatrix C = new SquareMatrix(2, contentsC);
         assertTrue(C.isDiagonal());
@@ -170,9 +172,9 @@ public class EigenvalueTests {
         Vector v2 = new Vector(c2);
         double[] c3 = { 1, -2, 1 };
         Vector v3 = new Vector(c3);
-        
-        ArrayList<Vector> eigenvectors = A.getEigenvectors();
                 
+        ArrayList<Vector> eigenvectors = A.getEigenvectors();
+        
         assertEquals(eigenvectors.size(), 3);
         assertTrue(eigenvectors.get(0).equals(v1));
 //        assertTrue(eigenvectors.get(1).equals(v2));
@@ -190,23 +192,47 @@ public class EigenvalueTests {
         Vector w1 = new Vector(d1);
         double[] d2 = { -1.20278, -0.468521, 0.265739, 1 };
         Vector w2 = new Vector(d2);
-        double[] d3 = { 2, -3, 0, 1 };
+        double[] d3 = { 1, -2, 1, 0 };
         Vector w3 = new Vector(d3);
-        double[] d4 = { 1, -2, 1, 0 };
+        double[] d4 = { 2, -3, 0, 1 };
         Vector w4 = new Vector(d4);
         
         ArrayList<Vector> eigenvectorsB = B.getEigenvectors();
-        
-        for (Vector v : B.getEigenvectors()) {
-            v.print();
-            System.out.println("");
-        }
-        
+                
         assertEquals(eigenvectorsB.size(), 4);
         assertTrue(eigenvectorsB.get(0).equals(w1));
-        assertTrue(eigenvectorsB.get(1).equals(w2));
+//        assertTrue(eigenvectorsB.get(1).equals(w2));
         assertTrue(eigenvectorsB.get(2).equals(w3));
         assertTrue(eigenvectorsB.get(3).equals(w4));
 
+        double[][] contentsC = {
+                        { 1, 2, 1 },
+                        { 6, -1, 0 },
+                        { -1, -2, -1 }
+        };
+        SquareMatrix C = new SquareMatrix(3, contentsC);
+
+        double[] e1 = { -1, 2, 1 };
+        Vector u1 = new Vector(e1);
+        double[] e2 = { -2, -3, 2 };
+        Vector u2 = new Vector(e2);
+        double[] e3 = { -1, -6, 13 };
+        Vector u3 = new Vector(e3);
+                        
+        assertEquals(C.getEigenvalues().get(0), -4, Matrix.epsilon);
+        assertEquals(C.getEigenvalues().get(1), 3, Matrix.epsilon);
+        assertEquals(C.getEigenvalues().get(2), 0, Matrix.epsilon);
+        
+        ArrayList<Vector> eigenvectorsC = C.getEigenvectors();
+        
+        System.out.println("hello");
+        eigenvectorsC.get(1).scaleWholeNum();
+        eigenvectorsC.get(1).print();
+        System.out.println("");
+        
+        assertEquals(eigenvectorsC.size(), 3);
+        assertTrue(eigenvectorsC.get(0).equals(u1));
+        assertTrue(eigenvectorsC.get(1).equals(u2));
+        assertTrue(eigenvectorsC.get(2).equals(u3));
     }
 }

@@ -111,6 +111,38 @@ public class Vector {
         }
         return true;
     }
+    
+    /** Scales every entry in this vector by K. */
+    public void scale(double k) {
+        for (int i = 0; i < _values.length; i++) {
+            _values[i] = _values[i] * k;
+        }
+    }
+    
+    /** Scales this vector to contain only whole numbers, if possible.
+     * If not possible, does nothing. */
+    public void scaleWholeNum() {
+        double[] copy = new double[_values.length];
+        System.arraycopy(_values, 0, copy, 0, _values.length);
+        Double factor = Math.abs(_values[0]);
+        for (double v : _values) {
+            if (Math.abs(v) < factor) {
+                System.out.println((int) v - v);
+                if (Math.abs((int) v - v) < Matrix.epsilon) {
+                    continue;
+                }
+                factor = Math.abs(v);
+            }
+        }
+        System.out.println(factor);
+        scale(1/factor);
+        for (double v : _values) {
+            if (Math.abs(v - (int) v) >= Matrix.epsilon) {
+                _values = copy;
+                break;
+            }
+        }
+    }
 
     /** Boolean indicating whether the vector has been normalized. */
     private boolean _normalized;

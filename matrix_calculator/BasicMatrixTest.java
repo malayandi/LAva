@@ -30,7 +30,7 @@ public class BasicMatrixTest {
         assertEquals(A.get(2, 3), 15.9, 0);
         A.print();        
     }
-
+    
     @Test
     public void elementaryRowOperations() throws MatrixException {
         double[][] contents = {
@@ -265,8 +265,8 @@ public class BasicMatrixTest {
         assertTrue(A.getTranspose().equals(AT));
         assertEquals(A.getTrace(), 8 , 0);
         A.getRowRed().print();
-        assertEquals(A.getDet(), -3, 0);
-        assertEquals(A.getDet(), 1/A.getInverse().getDet(), 0); 
+        assertEquals(A.getDet(), -3, Matrix.epsilon);
+        assertEquals(A.getDet(), 1/A.getInverse().getDet(), Matrix.epsilon); 
         assertTrue(A.getInverse().equals(AInverse));
     }
 }
