@@ -279,6 +279,6 @@ public class BasicMatrixTest {
 };
         Matrix matrix = new Matrix(3, 3, contents);
         Vector vector = new Vector(7, -1, -4);
-        matrix.augmentedMatrix(vector);
+        matrix.solve(vector);
     }
 }

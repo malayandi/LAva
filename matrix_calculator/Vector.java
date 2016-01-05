@@ -104,6 +104,16 @@ public class Vector {
     
     /** Returns true if this vector is equal to vector V. */
     public boolean equals(Vector v) {
+        for (int i = 0; i < v._numRows; i++) {
+            if (Math.abs(get(i) - v.get(i)) >= Matrix.epsilon) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /** Returns true if this vector is equal to vector V, within a scale factor. */
+    public boolean equalScale(Vector v) {
         if(v.values().length != values().length){
             System.out.println("The vector sizes do not match.");
             return false;
@@ -132,14 +142,12 @@ public class Vector {
         Double factor = Math.abs(_values[0]);
         for (double v : _values) {
             if (Math.abs(v) < factor) {
-                System.out.println((int) v - v);
                 if (Math.abs((int) v - v) < Matrix.epsilon) {
                     continue;
                 }
                 factor = Math.abs(v);
             }
         }
-        System.out.println(factor);
         scale(1/factor);
         for (double v : _values) {
             if (Math.abs(v - (int) v) >= Matrix.epsilon) {

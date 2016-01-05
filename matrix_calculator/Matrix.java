@@ -92,7 +92,8 @@ public class Matrix {
      * @throws MatrixException */
     public void rowReduction(Boolean EF) throws MatrixException {
         Matrix B = Operations.matrixCopy(this);
-        _pivots = new ArrayList<Integer>();
+        _pivotCols = new ArrayList<Integer>();
+        _pivotRows = new ArrayList<Integer>();
         int pivot = 1;
         for (int c = 1; c <= B.getWidth(); c++) {
             if (B.count(c, pivot) == 0) {
@@ -117,7 +118,8 @@ public class Matrix {
                 }
             }
             B.scalarMultRow(pivot, 1 / B.get(pivot, c));
-            _pivots.add(c);
+            _pivotCols.add(c);
+            _pivotRows.add(pivot);
             pivot++;
         }
         if (EF == true) {
@@ -213,7 +215,7 @@ public class Matrix {
         int count = 0;
         for (int c = 1; c <= getWidth(); c++) {
             double[] current = new double[getWidth()];
-            if (_pivots.contains(c)) {
+            if (_pivotCols.contains(c)) {
                 continue;
             }
             current[c - 1] = 1;
@@ -225,7 +227,7 @@ public class Matrix {
 //                continue;
 //            }
             int r = 1;
-            for (int p : _pivots) {
+            for (int p : _pivotCols) {
                 while (RREF.get(r, p) < epsilon) {
                     r++;
                 }
@@ -238,20 +240,127 @@ public class Matrix {
     }
     
     
-    /** Performs Ax=b with vector VECTOR as b. 
-     * @throws MatrixException */
-    public VectorSet augmentedMatrix(Vector vector) throws MatrixException{
+    /** Returns a vector which is one possible solution to the system
+     * of linear equations, Ax=b, where A is this matrix and B is
+     * a vector. Stores the general solution to this system in SOLSET. */
+    public Vector solve(Vector b, String[] solset) throws MatrixException {
         double[][] contents = new double[getHeight()][];
         for(int c = 0; c < getHeight(); c++){
             double[] matrix = _contents[c];
             contents[c] = new double[getWidth() + 1];
             System.arraycopy(matrix, 0, contents[c], 0, getWidth());
-            contents[c][getWidth()] = vector.values()[c];
+            contents[c][getWidth()] = b.values()[c];
         }
         Matrix augmented = new Matrix(getHeight(), getWidth() + 1, contents);
         Matrix RREF = augmented.getRowRedEF();
-        RREF.print();
-        return null;
+        double[] result = new double[getWidth()];
+        if (solset == null) {
+            solset = new String[getWidth()];
+        }
+        for (int r = 1; r <= getHeight(); r++) {
+            if (RREF.inconsistent(r)) {
+                System.out.println("No solution exists. This system is inconsistent.");
+                return null;
+            } 
+        }
+        for (int col = 1; col <= getWidth(); col++) {
+            if (RREF.getPivotCols().contains(col)) {
+                int r = RREF.getPivotRows().get(RREF.getPivotCols().indexOf(col));
+                String sol = df.format(RREF.get(col, RREF.getWidth())) + "";
+                for (int c = 1; c <= getWidth(); c++) {
+                    if (!RREF.getPivotCols().contains(c)) {
+                        String toAdd;
+                        double value = -1 * RREF.get(r, c);
+                        String entry = df.format(Math.abs(value));
+                        if (df.format(Math.abs(value)).equals("1")) {
+                            entry = "";
+                        }
+                        if (Math.abs(RREF.get(r, c)) < epsilon) {
+                            toAdd = "";
+                            continue;
+                        } else if (value > 0) {
+                            toAdd = " + ";
+                        } else {
+                            toAdd = " - ";
+                        }
+                        toAdd += entry + "x" + c;
+                        sol += toAdd;
+                    }
+                }
+                solset[col - 1] = sol;
+                result[col - 1] = RREF.get(r, RREF.getWidth());
+            } else {
+                solset[col - 1] = "Free";
+                result[col - 1] = 0;
+            }
+        }
+        Vector x = new Vector(result);
+        return x;
+    }
+
+    /** Returns a vector which is one possible solution to the system
+     * of linear equations, Ax=b, where A is this matrix and B is
+     * a vector. */
+    public Vector solve(Vector b) throws MatrixException {
+        return solve(b, null);
+    }
+    
+    /** Returns a string array containing a general solution set to the
+     * system of linear equations, Ax=b, where A is this matrix and B is
+     * a vector. Prints out this general solution.
+     * @throws MatrixException */
+    public String[] generalSolution(Vector b) throws MatrixException {
+        String[] solset = new String[getWidth()];
+        Vector test = solve(b, solset);
+        if (test == null) {
+            return null;
+        }
+        for (int i = 1; i <= getWidth(); i++) {
+            String entry = "[ x" + i + " ]   ";
+            if (i == getWidth()/2) {
+                entry += "=  [ " + solset[i - 1] + " ]";
+            } else {
+                entry += "   [ " + solset[i - 1] + " ]";
+            }
+            System.out.println(entry);
+        }
+        return solset;
+    }
+    
+    /** Returns an ArrayList containing the index of the pivot columns of this
+     * Matrix (index starting at 1). 
+     * @throws MatrixException */
+    public ArrayList<Integer> getPivotCols() throws MatrixException {
+        if (_pivotCols == null) {
+            getRowRed();
+        }
+        return _pivotCols;
+    }
+    
+    /** Returns an ArrayList containing the index of the pivot row of this
+     * Matrix (index starting at 1). 
+     * @throws MatrixException */
+    public ArrayList<Integer> getPivotRows() throws MatrixException {
+        if (_pivotRows == null) {
+            getRowRed();
+        }
+        return _pivotRows;
+    }
+
+
+    /** Returns true if row R is inconsistent, i.e. consists of all zeroes,
+     * except in the last column. */
+    public boolean inconsistent(int r) {
+        for (int c = 1; c < getWidth(); c++) {
+            if (get(r, c) >= epsilon) {
+                return false;
+            }
+        }
+        if (get(r, getWidth()) >= epsilon) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /** Returns true if a column contains only zeroes. */
@@ -439,7 +548,10 @@ public class Matrix {
     private ArrayList<Integer> _dim;
     
     /** The pivot columns of this Matrix. */
-    protected ArrayList<Integer> _pivots;
+    protected ArrayList<Integer> _pivotCols;
+    
+    /** The pivot rows of this Matrix. */
+    protected ArrayList<Integer> _pivotRows;
 
     /** The rank of this Matrix. */
     protected Integer _rank;

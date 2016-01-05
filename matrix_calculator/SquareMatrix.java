@@ -22,7 +22,8 @@ public class SquareMatrix extends Matrix {
     public void squareRowReduction(Boolean EF) throws MatrixException {
         SquareMatrix B = Operations.matrixCopy(this);
         SquareMatrix I = new SquareMatrix(getHeight(), new double[getHeight()][getHeight()]);
-        _pivots = new ArrayList<Integer>();
+        _pivotCols = new ArrayList<Integer>();
+        _pivotRows = new ArrayList<Integer>();
         for (int r = 1; r <= I.getHeight(); r++) {
             I.set(r, r, 1);
         }
@@ -78,7 +79,8 @@ public class SquareMatrix extends Matrix {
 //                    System.out.println("");
                 }
             }
-            _pivots.add(c);
+            _pivotCols.add(c);
+            _pivotRows.add(pivot);
             pivot++;
         }
         if (EF == true) {
@@ -367,11 +369,17 @@ public class SquareMatrix extends Matrix {
         result.add(P);
         result.add(D);
         result.add(P.getInverse());
+        
+        _diagonalised = result;
     }
     
     /** Returns an ArrayList containing P, D, P-1 (in that order) where
      * this matrix, A is expressed as A = PDP-1 and D is a diagonal matrix. */
     public ArrayList<SquareMatrix> getDiagonalised() throws MatrixException {
+        if (!isDiagonalisable()) {
+            System.out.println("This matrix is not diagonalisable.");
+            return null;
+        }
         if (_diagonalised == null) {
             diagonalise();
         }
