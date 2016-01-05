@@ -250,6 +250,30 @@ public class SquareMatrix extends Matrix {
         return isUpperTriangular() || isLowerTriangular();
     }
 
+    
+    /** Returns true if this matrix is similar to matrix MATRIX. 
+     * @throws MatrixException */
+    public boolean similar(SquareMatrix matrix) throws MatrixException{
+        if (_eigenvalues == null) {
+            eigenvalues();
+        }
+        ArrayList<Double> eigenvalues = new ArrayList<>();
+        for(double eigenvalue : matrix.getEigenvalues()){
+            eigenvalues.add(eigenvalue);
+        }
+        for(double eigenvalue : eigenvalues){
+            if(!_eigenvalues.contains(eigenvalue)){
+                return false;
+            } else {
+                eigenvalues.remove(eigenvalue);
+            }
+        }
+        if(eigenvalues.size() > 0){
+            return false;
+        }
+        return true;
+    }
+    
     /** Sets _eigenvalues to contain the eigenvalues of this Matrix. 
      * 
      * @throws MatrixException */

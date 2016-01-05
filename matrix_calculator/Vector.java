@@ -104,8 +104,13 @@ public class Vector {
     
     /** Returns true if this vector is equal to vector V. */
     public boolean equals(Vector v) {
-        for (int i = 0; i < numRows(); i++) {
-            if (Math.abs(v.get(i) - get(i)) >= Matrix.epsilon) {
+        if(v.values().length != values().length){
+            System.out.println("The vector sizes do not match.");
+            return false;
+        }
+        double factor = v.get(0) / get(0);
+        for (int i = 1; i < numRows(); i++) {
+            if (Math.abs(factor - (v.get(i) / get(i))) >= Matrix.epsilon) {
                 return false;
             }
         }

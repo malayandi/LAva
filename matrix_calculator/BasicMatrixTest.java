@@ -269,4 +269,16 @@ public class BasicMatrixTest {
         assertEquals(A.getDet(), 1/A.getInverse().getDet(), Matrix.epsilon); 
         assertTrue(A.getInverse().equals(AInverse));
     }
+    
+    @Test
+    public void axB() throws MatrixException {
+        double[][] contents = {
+                { 3, 5, -4 },
+                { -3, -2, 4 },
+                { 6, 1, -8 }
+};
+        Matrix matrix = new Matrix(3, 3, contents);
+        Vector vector = new Vector(7, -1, -4);
+        matrix.augmentedMatrix(vector);
+    }
 }

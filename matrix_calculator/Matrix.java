@@ -237,6 +237,23 @@ public class Matrix {
         return new VectorSet(result);
     }
     
+    
+    /** Performs Ax=b with vector VECTOR as b. 
+     * @throws MatrixException */
+    public VectorSet augmentedMatrix(Vector vector) throws MatrixException{
+        double[][] contents = new double[getHeight()][];
+        for(int c = 0; c < getHeight(); c++){
+            double[] matrix = _contents[c];
+            contents[c] = new double[getWidth() + 1];
+            System.arraycopy(matrix, 0, contents[c], 0, getWidth());
+            contents[c][getWidth()] = vector.values()[c];
+        }
+        Matrix augmented = new Matrix(getHeight(), getWidth() + 1, contents);
+        Matrix RREF = augmented.getRowRedEF();
+        RREF.print();
+        return null;
+    }
+    
     /** Returns true if a column contains only zeroes. */
     public boolean isZero(int c) {
         for (int r = 1; r <= getHeight(); r++) {

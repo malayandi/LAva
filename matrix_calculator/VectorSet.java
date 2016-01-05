@@ -190,16 +190,59 @@ public class VectorSet {
         return _vectors.size();
     }
 
+    
+    /** Returns true if this vector set is equal to SET. */
+    public boolean equals(VectorSet set){
+        VectorSet setVectors = new VectorSet();
+        for(Vector vector : set.vectors()){
+            setVectors.add(vector);
+        }
+        for(Vector vector : _vectors){
+            if(!setVectors.contains(vector)){
+                return false;
+            } else {
+                setVectors.remove(vector);
+            }
+        }
+        if(setVectors.size() > 0){
+            System.out.println(setVectors.size());
+            return false;
+        }
+        return true;
+    }
     /** Adds a vector to this vector set. */
     public void add(Vector vector) {
         _vectors.add(vector);
     }
 
+    /** Removes a vector from this vector set. */
+    public void remove(Vector vector){
+        for(Vector myVector : _vectors){
+            if(myVector.equals(vector)){
+                _vectors.remove(myVector);
+                break;
+            }
+        }
+    }
+    
     /** Gets a vector from this vector set. */
     public Vector get(int index) {
         return _vectors.get(index);
     }
+    /** Returns true if this set contains vector VECTOR. */
+    public boolean contains(Vector vector){
+        for(Vector setVector : _vectors){
+            if(setVector.equals(vector)){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    /** Returns all vectors within this set. */
+    public ArrayList<Vector> vectors(){
+        return _vectors;
+    }
     /** An ArrayList containing all vectors within this set. */
     private ArrayList<Vector> _vectors;
 }

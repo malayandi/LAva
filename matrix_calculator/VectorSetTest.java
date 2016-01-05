@@ -1,6 +1,6 @@
 package matrix_calculator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -71,6 +71,24 @@ public class VectorSetTest {
         Operations.matrixMult(matrix1, matrix2).print();
     }
 
+    
+    @Test
+    public void testEquality() throws MatrixException {
+        Vector vector1 = new Vector(1, 2);
+        Vector vector2 = new Vector(4, 3);
+        Vector vector3 = new Vector(5, 6);
+        VectorSet set1 = new VectorSet(vector1, vector2, vector3);
+        Vector vector4 = new Vector(4, 3);
+        Vector vector5 = new Vector(5, 6);
+        Vector vector6 = new Vector(1, 2);
+        VectorSet set2 = new VectorSet(vector4, vector5, vector6);
+        assertTrue(vector1.equals(vector4));
+        assertTrue(set1.contains(vector4));
+        assertTrue(set1.contains(vector5));
+        assertTrue(set1.contains(vector6));
+        assertTrue(set1.equals(set2));
+    }
+    
     @Test
     public void testColSpace() throws MatrixException {
         double[][] contents = { { -2.0, -5.0, 8.0, 0, -17 }, { 1.0, 3.0, -5.0, 1.0, 5.0 },
