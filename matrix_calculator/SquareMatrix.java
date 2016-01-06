@@ -263,8 +263,8 @@ public class SquareMatrix extends Matrix {
         for(double eigenvalue : matrix.getEigenvalues()){
             eigenvalues.add(eigenvalue);
         }
-        for(double eigenvalue : eigenvalues){
-            if(!_eigenvalues.contains(eigenvalue)){
+        for(double eigenvalue : _eigenvalues){
+            if(!eigenvalues.contains(eigenvalue)){
                 return false;
             } else {
                 eigenvalues.remove(eigenvalue);

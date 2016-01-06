@@ -515,9 +515,9 @@ public class Matrix {
      * @throws MatrixException */
     public int count(int c, int r) throws MatrixException {
         if (c < 1 || c > getWidth()) {
-            throw new MatrixException("Column " + c + "is not a valid row.");
+            throw new MatrixException("Column " + c + " is not a valid row.");
         } else if (r < 1 || r > getHeight()) {
-            throw new MatrixException("Row " + r + "is not a valid row.");
+            throw new MatrixException("Row " + r + " is not a valid row.");
         }
         int num = 0;
         for (int i = r; i <= getHeight(); i++) {

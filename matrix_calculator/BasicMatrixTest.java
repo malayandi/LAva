@@ -279,6 +279,17 @@ public class BasicMatrixTest {
 };
         Matrix matrix = new Matrix(3, 3, contents);
         Vector vector = new Vector(7, -1, -4);
-        matrix.solve(vector);
+        Vector solution = new Vector(-1, 2, 0);
+        assertTrue(matrix.solve(vector).equalScale(solution));
+        
+        double[][] contents2 = {
+                { 1, 2, -1 },
+                { 0, -5, 3 },
+        
+        };
+        Matrix matrix2 = new Matrix(2, 3, contents2);
+        Vector vector2 = new Vector(3, 6);
+        Vector solution2 = new Vector(4, 3, 7);
+        assertTrue(matrix2.solve(vector2).equalScale(solution2));
     }
 }

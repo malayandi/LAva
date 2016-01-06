@@ -233,4 +233,27 @@ public class EigenvalueTests {
         ArrayList<SquareMatrix> diagonalised = C.getDiagonalised();
         diagonalised.get(0).print();
     }
+    
+    @Test
+    public void similarity() throws MatrixException{
+        double[][] contents1 = {
+                {-13, -8, -4},
+                {12, 7, 4},
+                {24, 16, 7}
+        };
+        SquareMatrix matrix1 = new SquareMatrix(3, contents1);
+        double[][] contents2 = {
+                {-1, 0, 0},
+                {0, 3, 0},
+                {0, 0, -1}
+        };
+        SquareMatrix matrix2 = new SquareMatrix(3, contents2);
+        System.out.println(matrix1.getEigenvalues().get(0));
+        System.out.println(matrix1.getEigenvalues().get(1));
+        System.out.println(matrix1.getEigenvalues().get(2));
+        System.out.println(matrix2.getEigenvalues().get(0));
+        System.out.println(matrix2.getEigenvalues().get(1));
+        System.out.println(matrix2.getEigenvalues().get(2));
+        assertTrue(matrix1.similar(matrix2));
+    }
 }
