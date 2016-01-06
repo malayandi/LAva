@@ -263,11 +263,15 @@ public class SquareMatrix extends Matrix {
         for(double eigenvalue : matrix.getEigenvalues()){
             eigenvalues.add(eigenvalue);
         }
-        for(double eigenvalue : _eigenvalues){
-            if(!eigenvalues.contains(eigenvalue)){
-                return false;
-            } else {
-                eigenvalues.remove(eigenvalue);
+        ArrayList<Double> checked = new ArrayList<>();
+        for (double eigenvalue : _eigenvalues){
+            for (double e : matrix.getEigenvalues()) {
+                if (Math.abs(eigenvalue - e) < Matrix.epsilon * 100 && !checked.contains(eigenvalue)) {
+                    System.out.println(eigenvalue + " " + e);
+                    checked.add(eigenvalue);
+                    eigenvalues.remove(e);
+                    continue;
+                }
             }
         }
         if(eigenvalues.size() > 0){

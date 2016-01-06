@@ -82,7 +82,6 @@ public class VectorSetTest {
         Vector vector5 = new Vector(5, 6);
         Vector vector6 = new Vector(1, 2);
         VectorSet set2 = new VectorSet(vector4, vector5, vector6);
-        assertTrue(vector1.equals(vector4));
         assertTrue(set1.contains(vector4));
         assertTrue(set1.contains(vector5));
         assertTrue(set1.contains(vector6));

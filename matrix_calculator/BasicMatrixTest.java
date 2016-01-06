@@ -270,26 +270,5 @@ public class BasicMatrixTest {
         assertTrue(A.getInverse().equals(AInverse));
     }
     
-    @Test
-    public void axB() throws MatrixException {
-        double[][] contents = {
-                { 3, 5, -4 },
-                { -3, -2, 4 },
-                { 6, 1, -8 }
-};
-        Matrix matrix = new Matrix(3, 3, contents);
-        Vector vector = new Vector(7, -1, -4);
-        Vector solution = new Vector(-1, 2, 0);
-        assertTrue(matrix.solve(vector).equalScale(solution));
-        
-        double[][] contents2 = {
-                { 1, 2, -1 },
-                { 0, -5, 3 },
-        
-        };
-        Matrix matrix2 = new Matrix(2, 3, contents2);
-        Vector vector2 = new Vector(3, 6);
-        Vector solution2 = new Vector(4, 3, 7);
-        assertTrue(matrix2.solve(vector2).equalScale(solution2));
-    }
+
 }

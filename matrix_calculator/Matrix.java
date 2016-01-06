@@ -96,6 +96,9 @@ public class Matrix {
         _pivotRows = new ArrayList<Integer>();
         int pivot = 1;
         for (int c = 1; c <= B.getWidth(); c++) {
+            if (pivot > B.getHeight()) {
+                break;
+            }
             if (B.count(c, pivot) == 0) {
                 continue;
             } else if (B.get(pivot, c) == 0) {

@@ -41,4 +41,39 @@ public class SolutionTest {
         B.generalSolution(b2);
     }
 
+    @Test
+    public void axB() throws MatrixException {
+        double[][] contents = {
+                        { 3, 5, -4 },
+                        { -3, -2, 4 },
+                        { 6, 1, -8 }
+        };
+        Matrix matrix = new Matrix(3, 3, contents);
+        Vector vector = new Vector(7, -1, -4);
+        Vector solution = new Vector(-1, 2, 0);
+        assertTrue(matrix.solve(vector).equalScale(solution));
+
+        double[][] contents2 = {
+                        { 1, 2, -1 },
+                        { 0, -5, 3 },
+
+        };
+        Matrix matrix2 = new Matrix(2, 3, contents2);
+        Vector vector2 = new Vector(3, 6);
+        Vector solution2 = new Vector(4, 3, 7);
+
+        matrix2.generalSolution(vector2);
+
+        double[][] contents3 = {
+                        { 1, 3, 0, 2 },
+                        { 0, 0, 1, 4 },
+                        { 1, 3, 1, 6 }
+        };
+        Matrix matrix3 = new Matrix(3, 4, contents3);
+        Vector vector3 = new Vector(1, 6, 7);
+        Vector solution3 = new Vector(1, 0, 6, 0);
+        Vector answer = matrix3.solve(vector3);
+        assertTrue(answer.equalScale(solution3));
+    }
+    
 }
