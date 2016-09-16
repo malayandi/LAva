@@ -586,6 +586,6 @@ public class Matrix {
     protected static final double epsilon = 0.000001;
         
     /** The format of output for entries in the matrix. */
-    protected static final DecimalFormat df = new DecimalFormat("#.####");
+    protected static final DecimalFormat df = new DecimalFormat("#");
 
 }

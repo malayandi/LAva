@@ -267,7 +267,6 @@ public class SquareMatrix extends Matrix {
         for (double eigenvalue : _eigenvalues){
             for (double e : matrix.getEigenvalues()) {
                 if (Math.abs(eigenvalue - e) < Matrix.epsilon * 100 && !checked.contains(eigenvalue)) {
-                    System.out.println(eigenvalue + " " + e);
                     checked.add(eigenvalue);
                     eigenvalues.remove(e);
                     continue;
@@ -292,14 +291,8 @@ public class SquareMatrix extends Matrix {
             A = Operations.matrixMult(R, Q);
             while (!A.isTriangular()) {
                 Q = A.getQ();
-//                Q.print();
-//                System.out.println("");
                 R = A.getR();
-//                R.print();
-//                System.out.println("");
                 A = Operations.matrixMult(R, Q);
-//                A.print();
-//                System.out.println("");
             }
         }
         for (int i = 1; i <= getHeight(); i++) {
@@ -334,9 +327,9 @@ public class SquareMatrix extends Matrix {
             }
             computed.add(value);
         }
-        for (Vector v : eigenvectors) {
-            v.scaleWholeNum();
-        }
+//        for (Vector v : eigenvectors) {
+//            v.scaleWholeNum();
+//        }
         _eigenvectors = eigenvectors;
     }
     

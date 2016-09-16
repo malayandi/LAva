@@ -122,5 +122,16 @@ public class Operations {
         return B;
     }
 
+    /** Takes the exponent of a Square Matrix A to the Kth power.
+     * @throws MatrixException */
+    public static SquareMatrix exp(SquareMatrix A, int k) throws MatrixException {
+        int count = 1;
+        SquareMatrix B = Operations.matrixCopy(A);
+        while (count < k) {
+            count++;
+            B = Operations.matrixMult(B, A);
+        }
+        return B;
+    }
 
 }
